@@ -5,21 +5,67 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
+import { AccueilPage } from '../pages/accueil/accueil';
+import { SuggestionsPage } from '../pages/suggestions/suggestions';
+import { VotesPage } from '../pages/votes/votes';
+import { SynthesePage } from '../pages/synthese/synthese';
+import { ModalPage } from '../pages/modal/modal';
+import { RecherchePage } from '../pages/recherche/recherche';
+import { HistoriquePage } from '../pages/historique/historique';
+import { NavigationPage } from '../pages/navigation/navigation';
+import { AuthentificationPage } from '../pages/authentification/authentification';
+
+import { FlashCardComponent } from '../components/flash-card/flash-card';
+
+import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
+import { IonicImageLoader } from 'ionic-image-loader';
+import { DragulaModule } from 'ng2-dragula';
+import { HttpModule } from '@angular/http';
+import { SwingModule } from 'angular2-swing';
+
+
+
+const cloudSettings: CloudSettings = {
+  'core': {
+    'app_id': 'b9f52b0c'
+  }
+};
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    AccueilPage,
+    SuggestionsPage,
+    VotesPage,
+    SynthesePage,
+    ModalPage,
+    RecherchePage,
+    HistoriquePage,
+    NavigationPage,
+    AuthentificationPage,
+    FlashCardComponent,
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    CloudModule.forRoot(cloudSettings),
+    IonicImageLoader.forRoot(),
+    DragulaModule,
+    HttpModule,
+    SwingModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    AccueilPage,
+    SuggestionsPage,
+    VotesPage,
+    SynthesePage,
+    ModalPage,
+    RecherchePage,
+    HistoriquePage,
+    NavigationPage,
+    AuthentificationPage,
   ],
   providers: [
     StatusBar,

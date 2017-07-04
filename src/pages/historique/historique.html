@@ -1,0 +1,36 @@
+<!--
+  Generated template for the HistoryPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+<ion-navbar>
+    <button ion-button menuToggle="right" right>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+
+    <ion-title>Historique</ion-title>
+
+    <button ion-button menuToggle="left" left >
+      <ion-icon name="menu"></ion-icon>
+    </button>
+</ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-label>id: {{ histoire.id }}</ion-label>
+  <ion-label>nom: {{ histoire.nom }}</ion-label>
+  <ion-label>description: {{ histoire.description }}</ion-label>
+  <ion-label>date: {{ histoire.date }}</ion-label>
+  <ion-label>lieu: {{ histoire.lieu }}</ion-label>
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+      <ion-title>Historique</ion-title>
+  </ion-toolbar>
+</ion-footer>
