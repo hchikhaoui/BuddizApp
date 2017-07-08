@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
+import {Sortie} from '../../models/sortie'
 /**
  * Generated class for the historiquePage page.
  *
@@ -13,18 +14,13 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'historique.html',
 })
 export class HistoriquePage {
-public histoire:{
-    id: number,
-    nom: string,
-    description: string,
-    date: String, 
-    lieu: string
-  } = {
+public histoire:Sortie = {
       id: null,
       nom: '',
       description: '',
       date: new Date().toISOString(),
-      lieu: ''
+      lieu: '',
+      img: []
     }
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.histoire.id = navParams.get('id');
@@ -32,6 +28,7 @@ public histoire:{
     this.histoire.description = navParams.get('description');
     this.histoire.date = navParams.get('date');
     this.histoire.lieu = navParams.get('lieu');
+    this.histoire.img = navParams.get('img');
   }
 
   ionViewDidLoad() {

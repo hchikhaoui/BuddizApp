@@ -4,7 +4,6 @@ import { Platform, MenuController, Nav } from 'ionic-angular';
 
 import { AccueilPage } from '../accueil/accueil';
 import { SuggestionsPage } from '../suggestions/suggestions';
-import { VotesPage } from '../votes/votes';
 import { SynthesePage } from '../synthese/synthese';
 
 import { AlertController, LoadingController } from 'ionic-angular';

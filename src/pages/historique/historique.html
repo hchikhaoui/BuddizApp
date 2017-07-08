@@ -27,6 +27,15 @@
   <ion-label>date: {{ histoire.date }}</ion-label>
   <ion-label>lieu: {{ histoire.lieu }}</ion-label>
 
+
+  <div>
+    <ion-slides style="margin:0 auto;">
+      <ion-slide *ngFor="let image of histoire.img ">
+        <img style="width: 20vw;height: 20vh;margin: 20px auto;" src="{{image}}" />
+      </ion-slide>
+    </ion-slides>
+  </div>
+
 </ion-content>
 
 <ion-footer>

@@ -1,14 +1,16 @@
 ﻿import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, List, AlertController, ModalController } from 'ionic-angular';
 
-import { ModalPage } from '../modal/modal';
+//import { ModalPage } from '../modal/modal';
+import { CriteriaPage } from '../../modals/fixer_criteres';
 import { HistoriquePage } from '../historique/historique';
 import { SuggestionsPage } from '../suggestions/suggestions';
-import { VotesPage } from '../votes/votes';
+import { VotePage } from '../vote/vote';
 import { SynthesePage } from '../synthese/synthese';
 import { NavigationPage } from '../navigation/navigation';
 import { AuthentificationPage } from '../authentification/authentification';
 
+import {Sortie} from '../../models/sortie'
 @Component({
   selector: 'page-accueil',
   templateUrl: 'accueil.html'
@@ -16,31 +18,27 @@ import { AuthentificationPage } from '../authentification/authentification';
 export class AccueilPage {
     
 instant = new Date().toISOString()
-  public historiques: Array<{
-    id: any,
-    nom: any,
-    description: any,
-    date: any,
-    lieu: any,
-    img: any
-  }> = []
+  public historiques: Array<Sortie> = []
   archive = [];
-  
+
   constructor(public modalCtrl: ModalController, public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams) {
-    this.HistoriqueDesRecherches()
-    // localStorage.clear()
+//    localStorage.clear()
+      this.HistoriqueDesRecherches()    
   }
 
+
   RechercheModal() {
-    let modal = this.modalCtrl.create(ModalPage);
+    let modal = this.modalCtrl.create(CriteriaPage);
     modal.present();
   }
 
+
   HistoriqueDesRecherches()
-    {let j = 0
+    {
+      let j = 0
         for (var i = 0; i<localStorage.length; i++) {
             this.archive[i] = localStorage.getItem(localStorage.key(i));
-            if(JSON.parse(this.archive[i])['lieu']){
+            if (JSON.parse(this.archive[i])['lieu']) {
                 j++
                 this.historiques.push({
                   id: JSON.parse(this.archive[i])['id'],
@@ -48,10 +46,12 @@ instant = new Date().toISOString()
                   description: JSON.parse(this.archive[i])['description'],
                   date: JSON.parse(this.archive[i])['date'],
                   lieu: JSON.parse(this.archive[i])['lieu'],
-                  img: 'city-wallpaper-' + j.toString() + '.jpg' 
-                   })
-              }
+                  img: JSON.parse(this.archive[i])['img']
+                })
+                console.log(JSON.stringify(this.historiques))
+            }
         }
+        
   }
 
   historique(event, hist) {
@@ -61,7 +61,8 @@ instant = new Date().toISOString()
       nom: hist.nom,
       description: hist.description,
       date: hist.date,
-      lieu: hist.lieu
+      lieu: hist.lieu,
+      img: hist.img
     }
     );
   }
@@ -70,8 +71,8 @@ instant = new Date().toISOString()
     this.navCtrl.push(SuggestionsPage);
   }
 
-  Votes(event) {
-    this.navCtrl.push(VotesPage);
+  Vote(event) {
+    this.navCtrl.push(VotePage);
   }
 
   Synthese(event) {

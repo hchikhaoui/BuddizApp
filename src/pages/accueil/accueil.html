@@ -33,7 +33,7 @@
 <div *ngFor="let h of historiques">
   <ion-item *ngIf=" h.date < instant " >
     <ion-thumbnail item-start>
-      <img src="assets/img/{{h.img}}">
+      <img src="{{h.img[0]}}">
     </ion-thumbnail>
     <p>id: {{h.id}} </p>
     <h2>nom: {{h.nom}}</h2>
@@ -50,7 +50,7 @@
   <ion-item *ngIf=" h.date > instant " >
     <ion-thumbnail item-start>
 <!--      <img src="assets/img/{{h.img}}">      -->
-      <ion-img src="assets/img/{{h.img}}"></ion-img>
+      <img src="{{h.img[0]}}">
     </ion-thumbnail>
     <p>id: {{h.id}} </p>
     <h2>nom: {{h.nom}}</h2>
@@ -72,7 +72,7 @@
       <ion-icon name="search"></ion-icon>
     </button>
     
-    <button ion-button (click) = " Votes($event) " >
+    <button ion-button (click) = " Vote($event) " >
       <ion-icon name="thumbs-up"></ion-icon>
     </button>
 

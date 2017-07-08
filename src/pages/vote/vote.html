@@ -1,0 +1,74 @@
+﻿<!--
+  Generated template for the VotePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <!--    <button ion-button menuToggle="right" right>
+          <ion-icon name="menu"></ion-icon>
+        </button>  -->
+    <ion-title>Vote</ion-title>
+
+    <!--    <button ion-button menuToggle="left" left>
+          <ion-icon name="menu"></ion-icon>
+        </button> -->
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <div style="margin:0 auto;" *ngIf="q">
+    <flash-card>
+      <div class="flash-card-front">
+        <img style="width: 25vw; height: 25vh; margin: 0; position: absolute; top: 0; left: 0;" src="{{q}}" />
+      </div>
+      <div class="flash-card-back">
+        <ion-label>{{q}} </ion-label>
+      </div>
+    </flash-card>
+  </div>
+
+  <div>
+    <ion-slides style="margin:0 auto;">
+      <ion-slide *ngFor="let item of q1">
+        <img (click)=" Ajouter(item)" style="width: 20vw;height: 20vh;margin: 20px auto;" src="{{item}}" />
+      </ion-slide>
+    </ion-slides>
+  </div>
+  <div>
+    <ion-list [dragula]='"my-bag"' [dragulaModel]="q2">
+      <button (click)="PlusDetails()" style="background-color: #ecf0f1;-webkit-box-shadow: 0px 8px 4px -4px rgba(163,163,163,0.25);-moz-box-shadow: 0px 8px 4px -4px rgba(163,163,163,0.25);box-shadow: 0px 8px 4px -4px rgba(163,163,163,0.25);border: 1px solid #dee2e3;" ion-item *ngFor="let item2 of q2">
+
+        <ion-avatar item-left>
+          <img-loader [src]="item2" useImg [spinner]="false"></img-loader>
+        </ion-avatar>
+        <h4>{{item2}}</h4>
+        <p>nombre de photos assciées</p>
+        <ion-avatar item-right>
+          <img-loader [src]="item2" useImg [spinner]="false"></img-loader>
+        </ion-avatar>
+
+      </button>
+    </ion-list>
+  </div>
+
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+
+    <ion-buttons text-center>
+      <button ion-button (click)=" Suggestions($event) ">
+        <ion-icon name="search"></ion-icon>
+      </button>
+
+      <button ion-button (click)=" Vote($event) ">
+        <ion-icon name="thumbs-up"></ion-icon>
+      </button>
+      <button ion-button (click)=" Synthese($event) ">
+        <ion-icon name="stats"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

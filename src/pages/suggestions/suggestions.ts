@@ -10,6 +10,12 @@ import {
   DragEvent,
   SwingStackComponent,
   SwingCardComponent} from 'angular2-swing';
+
+import {Sortie} from '../../models/sortie';
+import {Carte} from '../../models/carte';
+
+import {VotePage} from '../vote/vote'
+import {SynthesePage} from '../synthese/synthese'
 /**
  * Generated class for the SuggestionsPage page.
  *
@@ -25,15 +31,34 @@ export class SuggestionsPage {
 @ViewChild('myswing1') swingStack: SwingStackComponent;
   @ViewChildren('mycards1') swingCards: QueryList<SwingCardComponent>;
 
-  cards: Array<any>;
-  removedcards: Array<any>;
+  key = '5841085-af19f9062faa1907624960285'
   stackConfig: StackConfig;
-  recentCard: string = '';
-  removedCard: any = null;
-  compt: number = 0 ;
-
+  
+  cards: Array<Carte> = [] ;
+  removedCard: Carte = null
+  recentCard: Carte = null
+  
+  msg: string = '';
+  
+  public recherche: Sortie = {
+      id: null,
+      nom: '',
+      description: '',
+      date: new Date().toISOString(),
+      lieu: '',
+      img: []
+  }
   constructor(private http: Http, public navCtrl: NavController, public navParams: NavParams) {
-    this.stackConfig = {
+
+      this.recherche.id = Math.floor(Math.random() * (100000000000000));
+      this.recherche.nom = navParams.get('nom');
+      this.recherche.description = navParams.get('description');
+      this.recherche.date = navParams.get('date');
+      this.recherche.lieu = navParams.get('lieu');
+      // localStorage.clear()
+      localStorage.setItem(this.recherche.id.toString(), JSON.stringify(this.recherche))
+
+      this.stackConfig = {
       throwOutConfidence: (offsetX, offsetY, element) => {
         return Math.min(Math.abs(offsetX) / (element.offsetWidth/2), 1);
       },
@@ -51,11 +76,28 @@ export class SuggestionsPage {
     this.swingStack.throwin.subscribe((event: DragEvent) => {
       event.target.style.background = '#ffffff';
     });
-    
-    this.cards = [{ id: null, nom: '' }];
-    this.removedcards = [{ id: null, nom: '', score: 0 }];
-    
-    this.addNewCards(1);
+    this.addNewCards();
+  }
+
+  voteUp(like: boolean) {
+  this.removedCard = this.cards.pop()
+  this.recentCard = this.cards[this.cards.length - 1]
+  if (like) {
+      this.recherche.img.push(this.removedCard.webformatURL)
+      localStorage.setItem(this.recherche.id.toString(), JSON.stringify(this.recherche))
+      this.msg = 'You liked: ' + this.removedCard.id;
+  } else {
+      this.msg = 'You disliked: ' + this.removedCard.id;
+    }
+  }
+
+  addNewCards() {
+    this.http.get('https://pixabay.com/api/?key=' + this.key + '&q=yellow+flowers&image_type=photo&pretty=true')
+        .subscribe(data => {
+            this.cards = data.json().hits
+            console.log(JSON.stringify(this.cards))
+              }, 
+              error => console.log('error while downloading image'))
   }
 
   onItemMove(element, x, y, r) {
@@ -74,38 +116,6 @@ export class SuggestionsPage {
   element.style['transform'] = `translate3d(0, 0, 0) translate(${x}px, ${y}px) rotate(${r}deg)`;
 }
  
-// Connected through HTML
-voteUp(like: boolean) {
-    this.removedCard = this.cards.pop();
-    this.removedCard.score = 0;
-  this.compt++;
-  this.addNewCards(this.compt);
-  if (like) {
-      this.removedCard.score++;
-      this.recentCard = 'You liked: ' + this.removedCard.nom;
-  } else {
-      this.removedCard.score--;
-      this.recentCard = 'You disliked: ' + this.removedCard.nom;
-  }
-  this.removedcards.push(this.removedCard)
-    //alert(JSON.stringify(this.removedcards))
-}
-
-// Add new cards to our array
-addNewCards(count: number) {
-    let val = { id: count, nom: "assets/img/city-wallpaper-" + count + ".jpg"}
-    this.cards.push(val);
-
-/*   this.http.get('https://randomuser.me/api/?results=' + count)
-  .map(data => data.json().results)
-  .subscribe(result => {
-    for (let val of result) { alert(JSON.stringify(result))
-      this.cards.push(val);
-    }
-  }) */
-}
- 
-// http://stackoverflow.com/questions/57803/how-to-convert-decimal-to-hex-in-javascript
 decimalToHex(d, padding) {
   var hex = Number(d).toString(16);
   padding = typeof (padding) === "undefined" || padding === null ? padding = 2 : padding;
@@ -116,6 +126,18 @@ decimalToHex(d, padding) {
   
   return hex;
 }
+
+Suggestions(event) {
+    this.navCtrl.push(SuggestionsPage);
+  }
+
+  Vote(event) {
+    this.navCtrl.push(VotePage);
+  }
+
+  Synthese(event) {
+    this.navCtrl.push(SynthesePage);
+  }
   ionViewDidLoad() {
     console.log('ionViewDidLoad SuggestionsPage');
   }

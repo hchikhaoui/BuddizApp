@@ -1,10 +1,10 @@
 ﻿import { Component, ViewChild } from '@angular/core';
 import { IonicPage} from 'ionic-angular';
-import { Platform, MenuController, Nav } from 'ionic-angular';
+import { Platform, MenuController, Nav, NavController,NavParams, App } from 'ionic-angular';
 
 import { AccueilPage } from '../accueil/accueil';
 import { SuggestionsPage } from '../suggestions/suggestions';
-import { VotesPage } from '../votes/votes';
+import { VotePage } from '../vote/vote';
 import { SynthesePage } from '../synthese/synthese';
 
 
@@ -23,15 +23,16 @@ import { SynthesePage } from '../synthese/synthese';
 })
 export class NavigationPage {
 
-@ViewChild(Nav) nav: Nav;
+//    @ViewChild(Nav) nav: Nav;
+    @ViewChild(NavController) nav: NavController;
 rootPage = AccueilPage;
 pages: Array<{title: string, component: any}>;
 
-constructor(public menuCtrl: MenuController) {
+constructor(private app: App,public menuCtrl: MenuController) {
     this.pages = [
       { title: 'Accueil', component: AccueilPage },
       { title: 'Suggestions', component: SuggestionsPage },
-      { title: 'Votes', component: VotesPage },
+      { title: 'Vote', component: VotePage },
       { title: 'Synthese', component: SynthesePage },      
     ];
 }
@@ -44,7 +45,7 @@ constructor(public menuCtrl: MenuController) {
     // close the menu when clicking a link from the menu
     this.menuCtrl.close();
     // navigate to the new page if it is not the current page
-    this.nav.setRoot(page.component);
+    this.app.getActiveNav().push(page.component)  
   }
 
 }

@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+﻿import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -7,10 +7,12 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { MyApp } from './app.component';
 import { AccueilPage } from '../pages/accueil/accueil';
 import { SuggestionsPage } from '../pages/suggestions/suggestions';
-import { VotesPage } from '../pages/votes/votes';
+import { VotePage } from '../pages/vote/vote';
 import { SynthesePage } from '../pages/synthese/synthese';
-import { ModalPage } from '../pages/modal/modal';
-import { RecherchePage } from '../pages/recherche/recherche';
+//import { ModalPage } from '../pages/modal/modal';
+import { CriteriaPage } from '../modals/fixer_criteres';
+import { DetailsPropositionPage } from '../modals/details_proposition';
+
 import { HistoriquePage } from '../pages/historique/historique';
 import { NavigationPage } from '../pages/navigation/navigation';
 import { AuthentificationPage } from '../pages/authentification/authentification';
@@ -23,7 +25,8 @@ import { DragulaModule } from 'ng2-dragula';
 import { HttpModule } from '@angular/http';
 import { SwingModule } from 'angular2-swing';
 
-
+import {Sortie} from '../models/sortie'
+import {Carte} from '../models/carte';
 
 const cloudSettings: CloudSettings = {
   'core': {
@@ -36,10 +39,10 @@ const cloudSettings: CloudSettings = {
     MyApp,
     AccueilPage,
     SuggestionsPage,
-    VotesPage,
+    VotePage,
     SynthesePage,
-    ModalPage,
-    RecherchePage,
+    CriteriaPage,
+    DetailsPropositionPage,
     HistoriquePage,
     NavigationPage,
     AuthentificationPage,
@@ -59,10 +62,10 @@ const cloudSettings: CloudSettings = {
     MyApp,
     AccueilPage,
     SuggestionsPage,
-    VotesPage,
+    VotePage,
     SynthesePage,
-    ModalPage,
-    RecherchePage,
+    CriteriaPage,
+    DetailsPropositionPage,
     HistoriquePage,
     NavigationPage,
     AuthentificationPage,
