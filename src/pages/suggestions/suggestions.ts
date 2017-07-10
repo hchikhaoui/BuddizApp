@@ -1,5 +1,5 @@
 ﻿import { Component, ViewChild, ViewChildren, QueryList } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController, AlertController } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/Rx';
 import {
@@ -16,6 +16,8 @@ import {Carte} from '../../models/carte';
 
 import {VotePage} from '../vote/vote'
 import {SynthesePage} from '../synthese/synthese'
+import { OptionsPage } from '../../modals/sortie_options';
+
 /**
  * Generated class for the SuggestionsPage page.
  *
@@ -29,16 +31,14 @@ import {SynthesePage} from '../synthese/synthese'
 })
 export class SuggestionsPage {
 @ViewChild('myswing1') swingStack: SwingStackComponent;
-  @ViewChildren('mycards1') swingCards: QueryList<SwingCardComponent>;
+@ViewChildren('mycards1') swingCards: QueryList<SwingCardComponent>;
 
-  key = '5841085-af19f9062faa1907624960285'
-  stackConfig: StackConfig;
-  
-  cards: Array<Carte> = [] ;
-  removedCard: Carte = null
-  recentCard: Carte = null
-  
-  msg: string = '';
+  public cards: Array<Carte> = [] ;
+  public removedCard: Carte = null
+  public recentCard: Carte = null
+  public key = '5841085-af19f9062faa1907624960285'
+  public stackConfig: StackConfig;
+  public msg: string = '';
   
   public recherche: Sortie = {
       id: null,
@@ -46,15 +46,23 @@ export class SuggestionsPage {
       description: '',
       date: new Date().toISOString(),
       lieu: '',
-      img: []
+      cartes: []
   }
-  constructor(private http: Http, public navCtrl: NavController, public navParams: NavParams) {
-
-      this.recherche.id = Math.floor(Math.random() * (100000000000000));
+  constructor(public modalCtrl: ModalController, private http: Http, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,) {
+      
+      if(navParams.get('id')){
+        this.recherche.id = navParams.get('id')
+      }else {
+        this.recherche.id = Math.floor(Math.random() * (100000000000000));
+      }      
+      if(navParams.get('cartes')){
+        this.recherche.cartes = navParams.get('cartes');
+      }
       this.recherche.nom = navParams.get('nom');
       this.recherche.description = navParams.get('description');
       this.recherche.date = navParams.get('date');
       this.recherche.lieu = navParams.get('lieu');
+     
       // localStorage.clear()
       localStorage.setItem(this.recherche.id.toString(), JSON.stringify(this.recherche))
 
@@ -71,33 +79,12 @@ export class SuggestionsPage {
     };
   }
 
+
   ngAfterViewInit() {
-    // Either subscribe in controller or set in HTML
     this.swingStack.throwin.subscribe((event: DragEvent) => {
       event.target.style.background = '#ffffff';
     });
     this.addNewCards();
-  }
-
-  voteUp(like: boolean) {
-  this.removedCard = this.cards.pop()
-  this.recentCard = this.cards[this.cards.length - 1]
-  if (like) {
-      this.recherche.img.push(this.removedCard.webformatURL)
-      localStorage.setItem(this.recherche.id.toString(), JSON.stringify(this.recherche))
-      this.msg = 'You liked: ' + this.removedCard.id;
-  } else {
-      this.msg = 'You disliked: ' + this.removedCard.id;
-    }
-  }
-
-  addNewCards() {
-    this.http.get('https://pixabay.com/api/?key=' + this.key + '&q=yellow+flowers&image_type=photo&pretty=true')
-        .subscribe(data => {
-            this.cards = data.json().hits
-            console.log(JSON.stringify(this.cards))
-              }, 
-              error => console.log('error while downloading image'))
   }
 
   onItemMove(element, x, y, r) {
@@ -127,17 +114,113 @@ decimalToHex(d, padding) {
   return hex;
 }
 
-Suggestions(event) {
-    this.navCtrl.push(SuggestionsPage);
+addNewCards() {
+  this.http.get('https://pixabay.com/api/?key=' + this.key + '&q=yellow+flowers&image_type=photo&pretty=true')
+      .subscribe(data => {
+          this.cards = data.json().hits
+         // console.log(JSON.stringify(this.cards))
+            }, 
+            error => console.log('error while downloading image'))
+}
+
+voteUp(like: boolean) {
+var exist = false
+this.removedCard = this.cards.pop()
+this.recentCard = this.cards[this.cards.length - 1]
+if (like) {
+  for( let c in this.recherche.cartes ){
+    if(JSON.stringify(this.recherche.cartes[c]) == JSON.stringify(this.removedCard)){
+      let alert = this.alertCtrl.create({
+        title:'existe dèjà!', 
+        subTitle:'Vérifier vos cartes',
+        buttons:['OK']
+      });
+      alert.present();
+      exist = true
+    }
+  }
+
+  if(exist == false){
+    this.recherche.cartes.push(this.removedCard)
+    localStorage.setItem(this.recherche.id.toString(), JSON.stringify(this.recherche))    
+  }
+
+
+  this.msg = 'You liked: ' + this.removedCard.id;
+
+
+  // if(this.recherche.cartes.indexOf(this.removedCard) == -1){
+  //   console.log(JSON.stringify(this.recherche.cartes))
+  //   this.recherche.cartes.push(this.removedCard)
+  //   localStorage.setItem(this.recherche.id.toString(), JSON.stringify(this.recherche))
+  // }else{
+  //   let alert = this.alertCtrl.create({
+  //       title:'existe dèjà!', 
+  //       subTitle:'Vérifier vos cartes',
+  //       buttons:['OK']
+  //     });
+  //     alert.present();
+  //   }
+} else {
+    this.msg = 'You disliked: ' + this.removedCard.id;
+  }
+  
+  
+  
+//   if(this.recherche.cartes.indexOf(this.removedCard) == -1){
+//     alert(JSON.stringify(this.removedCard))
+//     this.recherche.cartes.push(this.removedCard)
+//     localStorage.setItem(this.recherche.id.toString(), JSON.stringify(this.recherche))
+//   }else{
+//     let alert = this.alertCtrl.create({
+//         title:'existe dèjà!', 
+//         subTitle:'Vérifier vos cartes',
+//         buttons:['OK']
+//       });
+//       alert.present();
+//     }
+//   this.msg = 'You liked: ' + this.removedCard.id;
+// } else {
+//     this.msg = 'You disliked: ' + this.removedCard.id;
+//   }
+
+
+
+}
+
+  Suggestions(event) {
+    this.navCtrl.push(SuggestionsPage,{
+    id: this.recherche.id,
+    nom: this.recherche.nom,
+    description: this.recherche.description,
+    date: this.recherche.date,
+    lieu: this.recherche.lieu,
+    cartes: this.recherche.cartes
+    });
   }
 
   Vote(event) {
-    this.navCtrl.push(VotePage);
+    this.navCtrl.push(VotePage,{
+    id: this.recherche.id,
+    nom: this.recherche.nom,
+    description: this.recherche.description,
+    date: this.recherche.date,
+    lieu: this.recherche.lieu,
+    cartes: this.recherche.cartes
+    });
   }
 
   Synthese(event) {
-    this.navCtrl.push(SynthesePage);
+    this.navCtrl.push(SynthesePage,{
+    id: this.recherche.id,
+    nom: this.recherche.nom,
+    description: this.recherche.description,
+    date: this.recherche.date,
+    lieu: this.recherche.lieu,
+    cartes: this.recherche.cartes
+    });
   }
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad SuggestionsPage');
   }

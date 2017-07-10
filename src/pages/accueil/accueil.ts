@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, List, AlertController, ModalContro
 
 //import { ModalPage } from '../modal/modal';
 import { CriteriaPage } from '../../modals/fixer_criteres';
+import { OptionsPage } from '../../modals/sortie_options';
 import { HistoriquePage } from '../historique/historique';
 import { SuggestionsPage } from '../suggestions/suggestions';
 import { VotePage } from '../vote/vote';
@@ -22,13 +23,19 @@ instant = new Date().toISOString()
   archive = [];
 
   constructor(public modalCtrl: ModalController, public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams) {
-//    localStorage.clear()
+  // localStorage.clear()
       this.HistoriqueDesRecherches()    
   }
 
 
-  RechercheModal() {
+  CriteriaModal() {
     let modal = this.modalCtrl.create(CriteriaPage);
+    modal.present();
+  }
+
+
+  OptionsModal(option: string){
+    let modal = this.modalCtrl.create(OptionsPage,{opt: option, hist: this.historiques});
     modal.present();
   }
 
@@ -46,12 +53,12 @@ instant = new Date().toISOString()
                   description: JSON.parse(this.archive[i])['description'],
                   date: JSON.parse(this.archive[i])['date'],
                   lieu: JSON.parse(this.archive[i])['lieu'],
-                  img: JSON.parse(this.archive[i])['img']
+                  cartes: JSON.parse(this.archive[i])['cartes']
                 })
                 console.log(JSON.stringify(this.historiques))
             }
         }
-        
+        // alert(JSON.stringify(this.historiques))
   }
 
   historique(event, hist) {
@@ -62,22 +69,22 @@ instant = new Date().toISOString()
       description: hist.description,
       date: hist.date,
       lieu: hist.lieu,
-      img: hist.img
+      cartes: hist.cartes
     }
     );
   }
 
-  Suggestions(event) {
-    this.navCtrl.push(SuggestionsPage);
-  }
+  // Suggestions(event) {
+  //   this.navCtrl.push(SuggestionsPage);
+  // }
 
-  Vote(event) {
-    this.navCtrl.push(VotePage);
-  }
+  // Vote(event) {
+  //   this.navCtrl.push(VotePage);
+  // }
 
-  Synthese(event) {
-    this.navCtrl.push(SynthesePage);
-  }
+  // Synthese(event) {
+  //   this.navCtrl.push(SynthesePage);
+  // }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad BuddizPage');

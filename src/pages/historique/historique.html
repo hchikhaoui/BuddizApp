@@ -30,8 +30,8 @@
 
   <div>
     <ion-slides style="margin:0 auto;">
-      <ion-slide *ngFor="let image of histoire.img ">
-        <img style="width: 20vw;height: 20vh;margin: 20px auto;" src="{{image}}" />
+      <ion-slide *ngFor="let image of histoire.cartes ">
+        <img style="width: 20vw;height: 20vh;margin: 20px auto;" src="{{image.webformatURL}}" />
       </ion-slide>
     </ion-slides>
   </div>

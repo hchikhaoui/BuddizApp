@@ -7,6 +7,11 @@ import { SuggestionsPage } from '../suggestions/suggestions'
 import { SynthesePage } from '../synthese/synthese'
 
 import { DetailsPropositionPage } from '../../modals/details_proposition'
+import { OptionsPage } from '../../modals/sortie_options';
+
+import {Sortie} from '../../models/sortie'
+import {Carte} from '../../models/carte'
+
 /**
  * Generated class for the VotePage page.
  *
@@ -20,69 +25,87 @@ import { DetailsPropositionPage } from '../../modals/details_proposition'
     providers: [DragulaService]
 })
 export class VotePage {
-    q: any
-    q1 = [];
-    q2 = [];
+    public q: Carte
+    public q1: Array<Carte> = [];
+    public q2: Array<Carte> = [];
+    public recherche: Sortie = {
+      id: null,
+      nom: '',
+      description: '',
+      date: new Date().toISOString(),
+      lieu: '',
+      cartes: []
+  }
 
-    constructor(public modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams, public viewCtrl: ViewController, private dragulaService: DragulaService, public alertCtrl: AlertController) {
-        for (var i = 1; i < 49; i++) {
-            this.q1.push("assets/img/city-wallpaper-preview-" + i + ".jpg");
-        }
-        dragulaService.setOptions('my-bag', {
-            copy: false,                       // elements are moved by default, not copied
-            copySortSource: true,             // elements in copy-source containers can be reordered
-            revertOnSpill: true,              // spilling will put the element back where it was dragged from, if this is true
-            removeOnSpill: true,              // spilling will `.remove` the element, if this is true
-            mirrorContainer: document.body,    // set the element that gets mirror elements appended
-            ignoreInputTextSelection: true     // allows users to select input text, see details below
+constructor(public modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams, publicviewCtrl: ViewController, private dragulaService: DragulaService, public alertCtrl: AlertController) {    
+    this.recherche.id = navParams.get('id');      
+    this.recherche.nom = navParams.get('nom');
+    this.recherche.description = navParams.get('description');
+    this.recherche.date = navParams.get('date');
+    this.recherche.lieu = navParams.get('lieu');
+    this.recherche.cartes = navParams.get('cartes');
+    
+    this.q1 = this.recherche.cartes;
 
+    dragulaService.setOptions('my-bag', {
+        copy: false,                       // elements are moved by default, not copied
+        copySortSource: true,             // elements in copy-source containers can be reordered
+        revertOnSpill: true,              // spilling will put the element back where it was dragged from, if this i    true
+        removeOnSpill: true,              // spilling will `.remove` the element, if this is true
+        mirrorContainer: document.body,    // set the element that gets mirror elements appended
+        ignoreInputTextSelection: true     // allows users to select input text, see details below
         });
-    }
+}
 
-    PlusDetails() {
-        let modal = this.modalCtrl.create(DetailsPropositionPage);
-        modal.present();
-    }
+    
 
-    private onDrag(args) {
-        let [e, el] = args;
-        // do something
+Ajouter(item: Carte) {
+    if (this.q2.indexOf(item) == -1){
+        this.q2.push(item)
     }
+    this.q = item
+}
 
-    private onDrop(args) {
-        let [e, el] = args;
-        // do something
-    }
+PlusDetails() {
+    let modal = this.modalCtrl.create(DetailsPropositionPage);
+    modal.present();
+}
 
-    private onOver(args) {
-        let [e, el, container] = args;
-        // do something
-    }
+Suggestions(event) {
+    this.navCtrl.push(SuggestionsPage,{
+      id: this.recherche.id,
+      nom: this.recherche.nom,
+      description: this.recherche.description,
+      date: this.recherche.date,
+      lieu: this.recherche.lieu,
+      cartes: this.recherche.cartes
+    });
+}
 
-    private onOut(args) {
-        let [e, el, container] = args;
-        // do something
-    }
+Vote(event) {
+    this.navCtrl.push(VotePage,{
+      id: this.recherche.id,
+      nom: this.recherche.nom,
+      description: this.recherche.description,
+      date: this.recherche.date,
+      lieu: this.recherche.lieu,
+      cartes: this.recherche.cartes
+    });
+}
 
-    Ajouter(item: any) {
-        if (this.q2.indexOf(item) == -1)
-            this.q2.push(item)
-        this.q = item
-    }
+Synthese(event) {
+    this.navCtrl.push(SynthesePage,{
+      id: this.recherche.id,
+      nom: this.recherche.nom,
+      description: this.recherche.description,
+      date: this.recherche.date,
+      lieu: this.recherche.lieu,
+      cartes: this.recherche.cartes
+    });
+}
 
-    Suggestions(event) {
-        this.navCtrl.push(SuggestionsPage);
-    }
-
-    Vote(event) {
-        this.navCtrl.push(VotePage);
-    }
-
-    Synthese(event) {
-        this.navCtrl.push(SynthesePage);
-    }
-    ionViewDidLoad() {
-        console.log('ionViewDidLoad votePage');
-    }
+ionViewDidLoad() {
+    console.log('ionViewDidLoad votePage');
+}
 
 }

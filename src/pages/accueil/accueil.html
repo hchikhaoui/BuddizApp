@@ -23,7 +23,7 @@
 
 <ion-content padding>  
 
- <button ion-button color="primary" large round block (click)="RechercheModal()">Organiser une sortie</button>
+ <button ion-button color="primary" large round block (click)="CriteriaModal()">Organiser une sortie</button>
 
 <ion-list>
 
@@ -33,7 +33,7 @@
 <div *ngFor="let h of historiques">
   <ion-item *ngIf=" h.date < instant " >
     <ion-thumbnail item-start>
-      <img src="{{h.img[0]}}">
+      <img src="{{h.cartes[0].webformatURL}}">
     </ion-thumbnail>
     <p>id: {{h.id}} </p>
     <h2>nom: {{h.nom}}</h2>
@@ -49,8 +49,7 @@
 <div *ngFor="let h of historiques">
   <ion-item *ngIf=" h.date > instant " >
     <ion-thumbnail item-start>
-<!--      <img src="assets/img/{{h.img}}">      -->
-      <img src="{{h.img[0]}}">
+      <img src="{{h.cartes[0].webformatURL}}">
     </ion-thumbnail>
     <p>id: {{h.id}} </p>
     <h2>nom: {{h.nom}}</h2>
@@ -68,15 +67,15 @@
   <ion-toolbar>
     
     <ion-buttons text-center>
-    <button ion-button (click) = " Suggestions($event) " >
+    <button ion-button (click) = " OptionsModal('Suggestions') " >
       <ion-icon name="search"></ion-icon>
     </button>
     
-    <button ion-button (click) = " Vote($event) " >
+    <button ion-button (click) = " OptionsModal('Vote') " >
       <ion-icon name="thumbs-up"></ion-icon>
     </button>
 
-    <button ion-button (click) = " Synthese($event) " >
+    <button ion-button (click) = " OptionsModal('Synthese') " >
       <ion-icon name="stats"></ion-icon>
     </button>
     </ion-buttons>

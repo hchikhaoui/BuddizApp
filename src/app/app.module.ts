@@ -12,7 +12,7 @@ import { SynthesePage } from '../pages/synthese/synthese';
 //import { ModalPage } from '../pages/modal/modal';
 import { CriteriaPage } from '../modals/fixer_criteres';
 import { DetailsPropositionPage } from '../modals/details_proposition';
-
+import { OptionsPage } from '../modals/sortie_options';
 import { HistoriquePage } from '../pages/historique/historique';
 import { NavigationPage } from '../pages/navigation/navigation';
 import { AuthentificationPage } from '../pages/authentification/authentification';
@@ -42,6 +42,7 @@ const cloudSettings: CloudSettings = {
     VotePage,
     SynthesePage,
     CriteriaPage,
+    OptionsPage,
     DetailsPropositionPage,
     HistoriquePage,
     NavigationPage,
@@ -65,6 +66,7 @@ const cloudSettings: CloudSettings = {
     VotePage,
     SynthesePage,
     CriteriaPage,
+    OptionsPage,
     DetailsPropositionPage,
     HistoriquePage,
     NavigationPage,
