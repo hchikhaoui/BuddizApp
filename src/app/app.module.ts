@@ -9,10 +9,11 @@ import { AccueilPage } from '../pages/accueil/accueil';
 import { SuggestionsPage } from '../pages/suggestions/suggestions';
 import { VotePage } from '../pages/vote/vote';
 import { SynthesePage } from '../pages/synthese/synthese';
-//import { ModalPage } from '../pages/modal/modal';
+
 import { CriteriaPage } from '../modals/fixer_criteres';
 import { DetailsPropositionPage } from '../modals/details_proposition';
 import { OptionsPage } from '../modals/sortie_options';
+import { AddFriendsPage } from '../modals/add_friends';
 import { HistoriquePage } from '../pages/historique/historique';
 import { NavigationPage } from '../pages/navigation/navigation';
 import { AuthentificationPage } from '../pages/authentification/authentification';
@@ -27,6 +28,7 @@ import { SwingModule } from 'angular2-swing';
 
 import {Sortie} from '../models/sortie'
 import {Carte} from '../models/carte';
+import {Client} from '../models/client';
 
 const cloudSettings: CloudSettings = {
   'core': {
@@ -44,6 +46,7 @@ const cloudSettings: CloudSettings = {
     CriteriaPage,
     OptionsPage,
     DetailsPropositionPage,
+    AddFriendsPage,
     HistoriquePage,
     NavigationPage,
     AuthentificationPage,
@@ -68,6 +71,7 @@ const cloudSettings: CloudSettings = {
     CriteriaPage,
     OptionsPage,
     DetailsPropositionPage,
+    AddFriendsPage,
     HistoriquePage,
     NavigationPage,
     AuthentificationPage,

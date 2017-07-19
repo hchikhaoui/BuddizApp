@@ -15,13 +15,16 @@ import {Carte} from '../../models/carte'
   templateUrl: 'historique.html',
 })
 export class HistoriquePage {
+
+public carte: Carte
 public histoire:Sortie = {
       id: null,
       nom: '',
       description: '',
       date: new Date().toISOString(),
       lieu: '',
-      cartes: []
+      cartes: [],
+      favoris: []
     }
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.histoire.id = navParams.get('id');
@@ -30,6 +33,15 @@ public histoire:Sortie = {
     this.histoire.date = navParams.get('date');
     this.histoire.lieu = navParams.get('lieu');
     this.histoire.cartes = navParams.get('cartes');
+    this.histoire.favoris = navParams.get('favoris')
+  }
+
+  AfficherDetails(image: Carte){
+    this.carte = image
+  }
+
+  Accueil(ev){
+    this.navCtrl.popToRoot()
   }
 
   ionViewDidLoad() {

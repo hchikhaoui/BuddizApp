@@ -7,20 +7,36 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
  * See http://ionicframework.com/docs/components/#navigation for more info
  * on Ionic pages and navigation.
  */
+
+import { ViewController } from 'ionic-angular';
+import {Carte} from '../models/carte'
 @IonicPage()
 @Component({
     selector: 'page-details-proposition',
     templateUrl: 'details_proposition.html',
 })
 export class DetailsPropositionPage {
-    plusdephotos = []
-    constructor(public navCtrl: NavController, public navParams: NavParams) {
-        for (var i = 1; i < 49; i++) {
-            this.plusdephotos.push("assets/img/city-wallpaper-preview-" + i + ".jpg");
-        }
+
+  public  carte: Carte
+  public plusdephotos: Array<{
+        elementName: string,
+        elementId: string,
+        providerName: string,
+        copyrightImageSrc: string,
+        useCase: Array<string>
+        lastUpdate: number
+      }> = []
+    constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams) {
+      this.carte = navParams.get('item')
+      this.plusdephotos = this.carte.providersData
+
     }
 
-    
+  closeModal() {
+    this.viewCtrl.dismiss();
+  }
+
+
     ionViewDidLoad() {
         console.log('ionViewDidLoad DetailsPropositionPage');
     }

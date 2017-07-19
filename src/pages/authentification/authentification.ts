@@ -1,6 +1,6 @@
 ﻿import { Component, ViewChild } from '@angular/core';
 import { IonicPage} from 'ionic-angular';
-import { Platform, MenuController, Nav } from 'ionic-angular';
+import { Platform, MenuController, Nav, App } from 'ionic-angular';
 
 import { AccueilPage } from '../accueil/accueil';
 import { SuggestionsPage } from '../suggestions/suggestions';
@@ -8,6 +8,11 @@ import { SynthesePage } from '../synthese/synthese';
 
 import { AlertController, LoadingController } from 'ionic-angular';
 import { Auth, User, UserDetails, IDetailedError } from '@ionic/cloud-angular';
+import { ViewController } from 'ionic-angular';
+
+import {Sortie} from '../../models/sortie'
+import {Client} from '../../models/client'
+
 
 /**
  * Generated class for the AuthentificationPage page.
@@ -26,17 +31,34 @@ export class AuthentificationPage {
 @ViewChild(Nav) nav: Nav;
 rootPage = AccueilPage;
 
-showLogin:boolean = true;
-  email:string = '';
-  password:string = '';
-  name:string = '';
-  constructor(
+  public client: Client = {
+    id: null,
+    nom: '',
+    mail: '',
+    passe: '',
+    image: '',
+    sorties: []
+  }
+
+  public name:string = '';
+  public email:string = '';
+  public password:string = '';
+  public image:string = ''
+
+  public token: string = ''
+
+//public logged: boolean = false;
+public showLogin:boolean = true;
+
+public constructor(
+//    public viewCtrl: ViewController,
     public auth:Auth,
     public user: User,
     public alertCtrl: AlertController,
     public loadingCtrl:LoadingController,
     public platform: Platform,
     public menuCtrl: MenuController,
+    private app: App,
     ) {
   }
 
@@ -46,24 +68,29 @@ showLogin:boolean = true;
 
       if(this.email === '' || this.password === '') {
         let alert = this.alertCtrl.create({
-          title:'Erreur', 
+          title:'Erreur',
           subTitle:'Tous les champs sont requis',
           buttons:['OK']
         });
         alert.present();
         return;
-      }     
-
+      }
       let loader = this.loadingCtrl.create({
         content: "Logging in..."
       });
       loader.present();
-      
-      this.auth.login('basic', {'email':this.email, 'password':this.password}).then(() => {
-        console.log('ok i guess?');
+
+
+      let details: UserDetails = {'email':this.email, 'password':this.password};
+
+      this.auth.login('basic', details, {'remember': false}).then((res: any) => {
+        this.token = res.token
+
         loader.dismissAll();
-        this.nav.setRoot(AccueilPage);        
-      }, (err) => {
+          this.app.getActiveNav().push(AccueilPage)
+      //  this.logged = true;
+      }
+      , (err) => {
         loader.dismissAll();
         console.log(err.message);
 
@@ -72,7 +99,7 @@ showLogin:boolean = true;
         if(err.message === 'UNAUTHORIZED') errors += 'Mot de passe requis.<br/>';
 
         let alert = this.alertCtrl.create({
-          title:'Erreur', 
+          title:'Erreur',
           subTitle:errors,
           buttons:['OK']
         });
@@ -92,7 +119,7 @@ showLogin:boolean = true;
       */
       if(this.name === '' || this.email === '' || this.password === '') {
         let alert = this.alertCtrl.create({
-          title:'Erreur', 
+          title:'Erreur',
           subTitle:'All fields are rquired',
           buttons:['OK']
         });
@@ -100,21 +127,16 @@ showLogin:boolean = true;
         return;
       }
 
-      let details: UserDetails = {'email':this.email, 'password':this.password, 'name':this.name};
-      console.log(details);
-      
+      let details: UserDetails = {'email':this.email, 'password':this.password, 'name':this.name, 'image': this.image};
+
       let loader = this.loadingCtrl.create({
         content: "Registering your account..."
       });
       loader.present();
 
       this.auth.signup(details).then(() => {
-        console.log('ok signup');
-        this.auth.login('basic', {'email':details.email, 'password':details.password}).then(() => {
-          loader.dismissAll();
-          this.nav.setRoot(AccueilPage);
-        });
-
+        loader.dismissAll();
+        this.showLogin = true
       }, (err:IDetailedError<string[]>) => {
         loader.dismissAll();
         let errors = '';
@@ -127,16 +149,27 @@ showLogin:boolean = true;
           if(e === 'invalid_email') errors += 'Votre Email n\'est pas valide.';
         }
         let alert = this.alertCtrl.create({
-          title:'Register Error', 
+          title:'Register Error',
           subTitle:errors,
           buttons:['OK']
         });
         alert.present();
       });
-     
+
     } else {
       this.showLogin = false;
     }
+  }
+
+  doLogout(){
+    this.auth.logout()
+    this.app.getActiveNav().push(AccueilPage)
+   // this.logged = false
+  }
+
+  status(){
+    console.log(this.user.details.name)
+    console.log(this.auth.isAuthenticated())
   }
 
   ionViewDidLoad() {

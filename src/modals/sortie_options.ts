@@ -5,6 +5,9 @@ import { VotePage } from '../pages/vote/vote';
 import { SynthesePage } from '../pages/synthese/synthese';
 
 import { Sortie } from '../models/sortie'
+
+import { ViewController } from 'ionic-angular';
+
 /**
  * Generated class for the ModalPage page.
  *
@@ -18,17 +21,19 @@ import { Sortie } from '../models/sortie'
 })
 export class OptionsPage {
 
-    public opt: string 
+    public opt: string
     public hist: Array<Sortie>
-    
-    constructor(public navCtrl: NavController, public navParams: NavParams) {
+
+    constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams) {
         this.opt = navParams.get('opt')
         this.hist = navParams.get('hist')
     }
 
+  closeModal() {
+    this.viewCtrl.dismiss();
+  }
 
     itemTapped(event, h) {
-
         if(this.opt == 'Suggestions'){
             this.navCtrl.push(SuggestionsPage, {
             id: h.id,
@@ -37,6 +42,7 @@ export class OptionsPage {
             date: h.date,
             lieu: h.lieu,
             cartes: h.cartes,
+            favoris: h.favoris,
         })
         }else if(this.opt == 'Vote'){
             this.navCtrl.push(VotePage, {
@@ -46,6 +52,7 @@ export class OptionsPage {
             date: h.date,
             lieu: h.lieu,
             cartes: h.cartes,
+            favoris: h.favoris,
         })
         }else {
           this.navCtrl.push(SynthesePage, {
@@ -54,18 +61,11 @@ export class OptionsPage {
             description: h.description,
             date: h.date,
             lieu: h.lieu,
-            cartes: h.cartes,
-        })  
+            favoris: h.favoris,
+        })
         }
+      this.viewCtrl.dismiss()
 
-
-        // this.navCtrl.push(SuggestionsPage, {
-        //     nom: this.sortie.nom,
-        //     description: this.sortie.description,
-        //     date: this.sortie.date,
-        //     lieu: this.sortie.lieu
-        // });
-    
     }
     ionViewDidLoad() {
         console.log('ionViewDidLoad OptionsPage');

@@ -6,32 +6,50 @@
 -->
 <ion-header>
 <ion-navbar>
-    <button ion-button menuToggle="right" right>
+    <!--<button ion-button menuToggle="right" right>
       <ion-icon name="menu"></ion-icon>
-    </button>
+    </button>-->
 
-    <ion-title>Historique</ion-title>
+  <div style="display:inline-block" (click)="Accueil($event)">
+    <img  src="https://innovatorsrace50.com/uploads/e60944c8cb03e6821caff8fd4d6deba7/company_picture_18524_58ac738d2df16.png" width="40px"  height="40px"/>
+  </div>
+    <ion-title style="display:inline-block">Historique</ion-title>
 
-    <button ion-button menuToggle="left" left >
+    <!--<button ion-button menuToggle="left" left >
       <ion-icon name="menu"></ion-icon>
-    </button>
+    </button>-->
 </ion-navbar>
 </ion-header>
 
 
-<ion-content padding>
+<ion-content padding style="background-image: url('http://imgwallpaper.info/download/20151130/city-blur-evening-lights-1920x1200.jpg');">
 
+<div style="background-color: #e3ffee; ; opacity:0.3  ; margin: auto; width: 60%; border: 3px solid #8f8f8f ; padding: 10px">
   <ion-label>id: {{ histoire.id }}</ion-label>
   <ion-label>nom: {{ histoire.nom }}</ion-label>
   <ion-label>description: {{ histoire.description }}</ion-label>
   <ion-label>date: {{ histoire.date }}</ion-label>
   <ion-label>lieu: {{ histoire.lieu }}</ion-label>
+</div>
 
+<div style="margin: auto; padding: 10px" *ngIf="carte">
+    <flash-card>
+      <div class="flash-card-front">
+        <img style="width: 75vw; height: 50vh; margin: 0; position: absolute; top: 0; left: 0;" *ngIf="carte.providersData[0]" src="{{carte.providersData[0].copyrightImageSrc}}" />
+      </div>
+      <div class="flash-card-back">
+        <ion-label>carte Id: {{carte._id}} </ion-label>
+        <ion-label>carte nom: {{carte.detailedInformation.name}} </ion-label>
+        <ion-label>carte latitude: {{carte.detailedInformation.latitude}} </ion-label>
+        <ion-label>carte longitude: {{carte.detailedInformation.longitude}} </ion-label>
+      </div>
+    </flash-card>
+  </div>
 
   <div>
-    <ion-slides style="margin:0 auto;">
+    <ion-slides style="margin: auto; width: 60%; padding: 10px">
       <ion-slide *ngFor="let image of histoire.cartes ">
-        <img style="width: 20vw;height: 20vh;margin: 20px auto;" src="{{image.webformatURL}}" />
+        <img (click)=" AfficherDetails(image)" *ngIf="image.providersData[0].copyrightImageSrc" style="width: 50vw;height: 25vh;margin: 20px auto;" src="{{image.providersData[0].copyrightImageSrc}}" />
       </ion-slide>
     </ion-slides>
   </div>

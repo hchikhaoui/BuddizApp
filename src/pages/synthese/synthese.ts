@@ -8,6 +8,7 @@ import { OptionsPage } from '../../modals/sortie_options';
 
 import {Sortie} from '../../models/sortie'
 import {Carte} from '../../models/carte'
+import {AccueilPage} from "../accueil/accueil";
 /**
  * Generated class for the SynthesePage page.
  *
@@ -27,7 +28,8 @@ export class SynthesePage {
       description: '',
       date: new Date().toISOString(),
       lieu: '',
-      cartes: []
+      cartes: [],
+    favoris: []
   }
   constructor(public modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams) {
 
@@ -37,6 +39,11 @@ export class SynthesePage {
     this.recherche.date = navParams.get('date');
     this.recherche.lieu = navParams.get('lieu');
     this.recherche.cartes = navParams.get('cartes');
+    this.recherche.favoris = navParams.get('favoris');
+  }
+
+  Accueil(event){
+    this.navCtrl.popToRoot()
   }
 
   Suggestions(event) {
@@ -46,7 +53,8 @@ export class SynthesePage {
       description: this.recherche.description,
       date: this.recherche.date,
       lieu: this.recherche.lieu,
-      cartes: this.recherche.cartes
+      cartes: this.recherche.cartes,
+      favoris: this.recherche.favoris
     });
   }
 
@@ -57,7 +65,8 @@ export class SynthesePage {
       description: this.recherche.description,
       date: this.recherche.date,
       lieu: this.recherche.lieu,
-      cartes: this.recherche.cartes
+      cartes: this.recherche.cartes,
+      favoris: this.recherche.favoris
     });
   }
 
@@ -68,7 +77,8 @@ export class SynthesePage {
       description: this.recherche.description,
       date: this.recherche.date,
       lieu: this.recherche.lieu,
-      cartes: this.recherche.cartes
+      cartes: this.recherche.cartes,
+      favoris: this.recherche.favoris
     });
   }
 

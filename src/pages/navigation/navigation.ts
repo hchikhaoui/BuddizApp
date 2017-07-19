@@ -7,8 +7,10 @@ import { SuggestionsPage } from '../suggestions/suggestions';
 import { VotePage } from '../vote/vote';
 import { SynthesePage } from '../synthese/synthese';
 import { OptionsPage } from '../../modals/sortie_options';
+import { AddFriendsPage } from '../../modals/add_friends';
 
 import {Sortie} from '../../models/sortie'
+
 
 /**
  * Generated class for the NavigationPage page.
@@ -23,23 +25,21 @@ import {Sortie} from '../../models/sortie'
 })
 export class NavigationPage {
 
-//    @ViewChild(Nav) nav: Nav;
-    @ViewChild(NavController) nav: NavController;
-rootPage = AccueilPage;
-pages: Array<{title: string, component: any}>;
-
+public pages: Array<{title: string, component: any, icon: string}>;
 public historiques: Array<Sortie> = []
-archive = [];
+public archive = [];
 
 constructor(public modalCtrl: ModalController, private app: App,public menuCtrl: MenuController) {
     this.HistoriqueDesRecherches()
     this.pages = [
-      { title: 'Accueil', component: AccueilPage },
-      { title: 'Suggestions', component: SuggestionsPage },
-      { title: 'Vote', component: VotePage },
-      { title: 'Synthese', component: SynthesePage },      
+      { title: 'Accueil', component: AccueilPage, icon: 'home' },
+      { title: 'Suggestions', component: SuggestionsPage, icon: 'search'},
+      { title: 'Vote', component: VotePage, icon: 'thumbs-up' },
+      { title: 'Synthese', component: SynthesePage, icon: 'stats' },
+      { title: 'Contribution', component: AddFriendsPage, icon: 'people' },
     ];
 }
+x: string = 'home'
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad NavigationPage');
@@ -58,24 +58,34 @@ constructor(public modalCtrl: ModalController, private app: App,public menuCtrl:
                   description: JSON.parse(this.archive[i])['description'],
                   date: JSON.parse(this.archive[i])['date'],
                   lieu: JSON.parse(this.archive[i])['lieu'],
-                  cartes: JSON.parse(this.archive[i])['cartes']
+                  cartes: JSON.parse(this.archive[i])['cartes'],
+                  favoris: JSON.parse(this.archive[i])['favoris']
+
                 })
                 console.log(JSON.stringify(this.historiques))
             }
         }
-        // alert(JSON.stringify(this.historiques))
   }
 
   OptionsModal(option: string){
+  if(option == 'Accueil'){
+    //this.app.getActiveNav().push(AccueilPage)
+  }else if(option == 'Contribution'){
+    let ctrb = this.modalCtrl.create(AddFriendsPage)
+    ctrb.present();
+  }
+  else{
     let modal = this.modalCtrl.create(OptionsPage,{opt: option, hist: this.historiques});
     modal.present();
+  }
+  this.menuCtrl.close();
   }
 
   openPage(page) {
 
     this.menuCtrl.close();
 
-    this.app.getActiveNav().push(page.component)  
+    this.app.getActiveNav().push(page.component)
   }
 
 }

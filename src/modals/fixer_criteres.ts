@@ -3,6 +3,9 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { SuggestionsPage } from '../pages/suggestions/suggestions';
 
 import { Sortie } from '../models/sortie'
+import { Carte } from '../models/carte'
+
+import { ViewController } from 'ionic-angular';
 /**
  * Generated class for the ModalPage page.
  *
@@ -17,18 +20,18 @@ import { Sortie } from '../models/sortie'
 export class CriteriaPage {
 
 public items: any
-public sortie: Sortie
-
-constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.initializeItems();
-    this.sortie = {
+public sortie: Sortie = {
         id: null,
         nom: '',
         description: '',
         date: new Date().toISOString(),
         lieu: '',
-        cartes: []
+        cartes: [],
+        favoris: []
     }
+
+constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams) {
+    this.initializeItems();
 }
 
 itemTapped(event) {
@@ -36,8 +39,13 @@ itemTapped(event) {
         nom: this.sortie.nom,
         description: this.sortie.description,
         date: this.sortie.date,
-        lieu: this.sortie.lieu
+        lieu: this.sortie.lieu,
     });
+    this.viewCtrl.dismiss()
+}
+
+closeModal() {
+  this.viewCtrl.dismiss();
 }
 
 initializeItems() {

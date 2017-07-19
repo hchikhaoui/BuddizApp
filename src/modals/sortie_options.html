@@ -6,35 +6,42 @@
 -->
 <ion-header>
   <ion-navbar>
-    <!--<button ion-button menuToggle="right" right>
-      <ion-icon name="menu"></ion-icon>
-    </button>-->
+
     <ion-title>{{opt}}</ion-title>
 
-    <!--<button ion-button menuToggle="left" left >
-      <ion-icon name="menu"></ion-icon>
-    </button>-->
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding style="background-color: #F7FFED !important;">
+
 <ion-list>
-<!--<div >-->
 <button (click)="itemTapped($event, h)" style="background-color: #ecf0f1;-webkit-box-shadow: 0px 8px 4px -4px rgba(163,163,163,0.25);-moz-box-shadow: 0px 8px 4px -4px rgba(163,163,163,0.25);box-shadow: 0px 8px 4px -4px rgba(163,163,163,0.25);border: 1px solid #dee2e3;" ion-item *ngFor="let h of hist" >
 
-    <ion-avatar item-left>
-        <ion-row><ion-col><img-loader [src]="h.cartes[0].webformatURL" useImg [spinner]="false"></img-loader></ion-col><ion-col><p>{{h.date}}</p><p>{{h.lieu}}</p></ion-col></ion-row>
-    </ion-avatar>
-    <h4>{{h.nom}}</h4>
-    <p>{{h.description}}</p>
-    <ion-avatar item-right>
-        <img-loader [src]="h.cartes[0].webformatURL" useImg [spinner]="false"></img-loader>
-    </ion-avatar>
+<ion-avatar item-left>
+    <ion-row>
+      <ion-col>
+        <img-loader *ngIf="h.cartes[0]" [src]="h.cartes[0].providersData[0].copyrightImageSrc" useImg [spinner]="false">
+        </img-loader>
+      </ion-col>
+      <ion-col>
+        <p>{{h.date}}</p>
+        <p>{{h.lieu}}</p>
+      </ion-col>
+    </ion-row>
+</ion-avatar>
+<h4>{{h.nom}}</h4>
+<p>{{h.description}}</p>
+<ion-avatar item-right>
+    <img-loader *ngIf="h.cartes[0]" [src]="h.cartes[0].providersData[0].copyrightImageSrc" useImg [spinner]="false">
+    </img-loader>
+</ion-avatar>
 </button>
-<!--</div>-->
 </ion-list>
+
+<button ion-button block color="secondary" (click)="closeModal()">Close</button>
+
 </ion-content>
-    
+
 <ion-footer>
   <ion-toolbar>
     <ion-title>{{opt}}</ion-title>

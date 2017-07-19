@@ -10,7 +10,7 @@ import { AuthentificationPage } from '../pages/authentification/authentification
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
+import { ViewController } from 'ionic-angular';
 
 @Component({
   templateUrl: 'app.html'

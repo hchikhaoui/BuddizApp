@@ -6,20 +6,18 @@
 -->
 <ion-header>
   <ion-navbar>
-    <!--    <button ion-button menuToggle="right" right>
-          <ion-icon name="menu"></ion-icon>
-        </button>  -->
-    <ion-title>Vote</ion-title>
 
-    <!--    <button ion-button menuToggle="left" left>
-          <ion-icon name="menu"></ion-icon>
-        </button> -->
+    <div style="display:inline-block" (click)="Accueil($event)">
+      <img  src="https://innovatorsrace50.com/uploads/e60944c8cb03e6821caff8fd4d6deba7/company_picture_18524_58ac738d2df16.png" width="40px"  height="40px"/>
+    </div>
+    <ion-title style="display:inline-block" >Vote</ion-title>
+
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding style="background-image: url('https://drscdn.500px.org/photo/52710426/q%3D80_m%3D1500/ac3fc98522484898839115fe3c931a33');">
 
-<div style="margin:0 auto;">
+<div style="background-color: #e3ffee; ; opacity:0.3  ; margin: auto; width: 60%; border: 3px solid #8f8f8f ; padding: 10px">
   <p>id: {{recherche.id}}</p>
   <p>nom: {{recherche.nom}}</p>
   <p>description: {{recherche.description}}</p>
@@ -27,38 +25,38 @@
   <p>lieu: {{recherche.lieu}}</p>
 </div>
 
-  <div style="margin:0 auto;" *ngIf="q">
+  <div style="margin: auto; padding: 10px" *ngIf="q">
     <flash-card>
       <div class="flash-card-front">
-        <img style="width: 25vw; height: 25vh; margin: 0; position: absolute; top: 0; left: 0;" src="{{q.webformatURL}}" />
+        <img style="width: 75vw; height: 50vh; margin: 0; position: absolute; top: 0; left: 0;" *ngIf="q.providersData[0]" src="{{q.providersData[0].copyrightImageSrc}}" />
       </div>
       <div class="flash-card-back">
-        <ion-label>user: {{q.user}} </ion-label>
-        <ion-label>user id: {{q.user_id}} </ion-label>
-        <ion-label>carte id: {{q.id}} </ion-label>
-        <ion-label>likes: {{q.likes}} </ion-label>
+        <ion-label>carte Id: {{q._id}} </ion-label>
+        <ion-label>carte nom: {{q.detailedInformation.name}} </ion-label>
+        <ion-label>carte latitude: {{q.detailedInformation.latitude}} </ion-label>
+        <ion-label>carte longitude: {{q.detailedInformation.longitude}} </ion-label>
       </div>
     </flash-card>
   </div>
 
   <div>
-    <ion-slides style="margin:0 auto;">
-      <ion-slide *ngFor="let item of q1">
-        <img (click)=" Ajouter(item)" style="width: 20vw;height: 20vh;margin: 20px auto;" src="{{item.webformatURL}}" />
+    <ion-slides style="margin: auto; width: 60%; padding: 10px">
+      <ion-slide *ngFor="let item of recherche.cartes">
+        <img (click)=" AjouterAuFavoris(item)" style="width: 50vw;height: 25vh;margin: 20px auto;" *ngIf="item.providersData[0]" src="{{item.providersData[0].copyrightImageSrc}}" />
       </ion-slide>
     </ion-slides>
   </div>
   <div>
-    <ion-list [dragula]='"my-bag"' [dragulaModel]="q2">
-      <button (click)="PlusDetails()" style="background-color: #ecf0f1;-webkit-box-shadow: 0px 8px 4px -4px rgba(163,163,163,0.25);-moz-box-shadow: 0px 8px 4px -4px rgba(163,163,163,0.25);box-shadow: 0px 8px 4px -4px rgba(163,163,163,0.25);border: 1px solid #dee2e3;" ion-item *ngFor="let item2 of q2">
+    <ion-list [dragula]='"my-bag"' [dragulaModel]="recherche.favoris">
+      <button (click)="PlusDetails(item2)" style="opacity:0.7; background-color: #E7FBCD;-webkit-box-shadow: 0px 8px 4px -4px rgba(163,163,163,0.25);-moz-box-shadow: 0px 8px 4px -4px rgba(163,163,163,0.25);box-shadow: 0px 8px 4px -4px rgba(163,163,163,0.25);border: 1px solid #dee2e3;" ion-item *ngFor="let item2 of recherche.favoris">
 
         <ion-avatar item-left>
-          <img-loader [src]="item2.webformatURL" useImg [spinner]="false"></img-loader>
+          <img-loader *ngIf="item2.providersData[0]" [src]="item2.providersData[0].copyrightImageSrc" useImg [spinner]="false"></img-loader>
         </ion-avatar>
-        <h4>{{item2}}</h4>
-        <p>nombre de photos assciées</p>
+        <h4>id: {{item2._id}}</h4>
+        <p>nombre de photos assciées: {{item2.providersData.length}}</p>
         <ion-avatar item-right>
-          <img-loader [src]="item2.webformatURL" useImg [spinner]="false"></img-loader>
+          <img-loader *ngIf="item2.providersData[0]" [src]="item2.providersData[0].copyrightImageSrc" useImg [spinner]="false"></img-loader>
         </ion-avatar>
 
       </button>
@@ -66,6 +64,7 @@
   </div>
 
 </ion-content>
+
 <ion-footer>
   <ion-toolbar>
 
@@ -73,7 +72,7 @@
     <button ion-button (click) = " Suggestions($event) " >
       <ion-icon name="search"></ion-icon>
     </button>
-    
+
     <button ion-button (click) = " Vote($event) " >
       <ion-icon name="thumbs-up"></ion-icon>
     </button>
@@ -82,6 +81,6 @@
       <ion-icon name="stats"></ion-icon>
     </button>
     </ion-buttons>
-    
+
   </ion-toolbar>
 </ion-footer>

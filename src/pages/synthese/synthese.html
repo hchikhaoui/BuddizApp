@@ -7,23 +7,21 @@
 <ion-header>
 
     <ion-navbar>
-    <button ion-button menuToggle="right" right>
-      <ion-icon name="menu"></ion-icon>
-    </button>
 
-    <ion-title>Synthese</ion-title>
-    
-    <button ion-button menuToggle="left" left >
-      <ion-icon name="menu"></ion-icon>
-    </button>
-  </ion-navbar>
+      <div style="display:inline-block" (click)="Accueil($event)">
+        <img  src="https://innovatorsrace50.com/uploads/e60944c8cb03e6821caff8fd4d6deba7/company_picture_18524_58ac738d2df16.png" width="40px"  height="40px"/>
+      </div>
+      <ion-title style="display:inline-block" >Synthèses</ion-title>
+
+
+    </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
-  
-  <div style="margin:0 auto;">
+<ion-content padding style="background-image: url('http://static.wixstatic.com/media/6cfe27_c21008288ed3487a8450323c3a36fe30~mv2.jpg');">
+
+  <div style="background-color: #e3ffee; ; opacity:0.3  ; margin: auto; width: 60%; border: 3px solid #8f8f8f ; padding: 10px">
   <p>id: {{recherche.id}}</p>
   <p>nom: {{recherche.nom}}</p>
   <p>description: {{recherche.description}}</p>
@@ -36,12 +34,12 @@
 
 <ion-footer>
   <ion-toolbar>
-    
+
     <ion-buttons text-center>
     <button ion-button (click) = " Suggestions($event) " >
       <ion-icon name="search"></ion-icon>
     </button>
-    
+
     <button ion-button (click) = " Vote($event) " >
       <ion-icon name="thumbs-up"></ion-icon>
     </button>

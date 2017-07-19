@@ -6,23 +6,16 @@
 -->
 <ion-header>
   <ion-navbar>
-    <!--<button ion-button menuToggle="right" right>
-      <ion-icon name="menu"></ion-icon>
-    </button>-->
     <ion-title>Fixer les critères de recherche</ion-title>
-
-    <!--<button ion-button menuToggle="left" left >
-      <ion-icon name="menu"></ion-icon>
-    </button>-->
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding style="background-color: #F7FFED !important">
 
   <ion-list inset>
     <ion-item>
       <ion-label>Nom de la sortie</ion-label>
-      <ion-input name="nom" [(ngModel)]="sortie.nom" type="text" placeholder="recherche de Anon"></ion-input>
+      <ion-input name="nom" [(ngModel)]="sortie.nom" type="text" placeholder="Nom de recherche"></ion-input>
     </ion-item>
     <ion-item>
       <ion-input name="description" [(ngModel)]="sortie.description" type="text" placeholder="Quelques mots pour decrire votre recherche"></ion-input>
@@ -36,14 +29,16 @@
       <ion-searchbar name="lieu" [(ngModel)]="sortie.lieu" placeholder="Lieu" (ionInput)="getItems($event)"></ion-searchbar>
       <ion-list>
         <ion-item *ngFor="let item of items">
-          {{ item }}
+          <button ion-button color="secondary" block outline (click) = "sortie.lieu = item" > {{ item }} </button>
         </ion-item>
       </ion-list>
     </ion-item>
     <ion-item>
-      <button ion-button color="primary" block (click)="itemTapped($event)">Lancer!</button>
+      <button ion-button color="secondary" block (click)="itemTapped($event)">Lancer!</button>
     </ion-item>
   </ion-list>
+
+  <button ion-button color="secondary" block (click)="closeModal()">Close</button>
 </ion-content>
 
 <ion-footer>
