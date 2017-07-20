@@ -24,8 +24,8 @@ instant = new Date().toISOString()
 
   constructor(public auth:Auth, public user: User, public modalCtrl: ModalController, public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams) {
 //  localStorage.clear()
-    //this.user.unset('sorties')
-    //this.user.save()
+      // this.user.unset('sorties')
+      // this.user.save()
       this.HistoriqueDesRecherches()
   }
 
@@ -48,6 +48,24 @@ instant = new Date().toISOString()
   HistoriqueDesRecherches()
     {
       this.historiques = this.user.get('sorties', null)
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      // for(let c in this.historiques){
+      //   console.log('historique: ' + c + '##########################################')
+      //   console.log(JSON.stringify(this.historiques[c].favoris))
+      // }
+      
 //      let j = 0
 //        for (var i = 0; i<localStorage.length; i++) {
 //            this.archive[i] = localStorage.getItem(localStorage.key(i));

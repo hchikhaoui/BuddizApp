@@ -61,9 +61,11 @@ export class SuggestionsPage {
       }
       if(navParams.get('cartes')){
         this.recherche.cartes = navParams.get('cartes');
+        console.log(JSON.stringify('cartes: ' + this.recherche.cartes))
       }
     if(navParams.get('favoris')){
       this.recherche.favoris = navParams.get('favoris');
+      console.log(JSON.stringify('favoris: ' + this.recherche.favoris))
     }
       this.recherche.nom = navParams.get('nom');
       this.recherche.description = navParams.get('description');
@@ -117,7 +119,7 @@ export class SuggestionsPage {
     this.recentCard = this.cards[this.cards.length - 1]
     if (like) {
       for( let c in this.recherche.cartes ){
-        if(JSON.stringify(this.recherche.cartes[c]) == JSON.stringify(this.removedCard)){
+        if(this.recherche.cartes[c]._id == this.removedCard._id){
           let alert = this.alertCtrl.create({
             title:'existe dèjà!',
             subTitle:'Vérifier vos cartes',
@@ -214,7 +216,7 @@ private FixerHeader() {
 addNewCards() {
 
   let cartee1= {
-  _id: "59637e6b7a5a2f794f5dc3ec",
+  _id: "59637e6b7a5a2f794f5dc3ec1",
 
   detailedInformation: {
     latitude: 48.888876237644006,
@@ -269,7 +271,7 @@ addNewCards() {
 }
 
   let cartee2= {
-    _id: "59637e6b7a5a2f794f5dc3ec",
+    _id: "59637e6b7a5a2f794f5dc3ec2",
 
     detailedInformation: {
       latitude: 48.888876237644006,
@@ -324,7 +326,7 @@ addNewCards() {
   }
 
   let cartee3= {
-    _id: "59637e6b7a5a2f794f5dc3ec",
+    _id: "59637e6b7a5a2f794f5dc3ec3",
 
     detailedInformation: {
       latitude: 48.888876237644006,
@@ -379,7 +381,7 @@ addNewCards() {
   }
 
   let cartee4= {
-    _id: "59637e6b7a5a2f794f5dc3ec",
+    _id: "59637e6b7a5a2f794f5dc3ec4",
 
     detailedInformation: {
       latitude: 48.888876237644006,
@@ -434,7 +436,7 @@ addNewCards() {
   }
 
   let cartee5= {
-    _id: "59637e6b7a5a2f794f5dc3ec",
+    _id: "59637e6b7a5a2f794f5dc3ec5",
 
     detailedInformation: {
       latitude: 48.888876237644006,
@@ -489,7 +491,7 @@ addNewCards() {
   }
 
   let cartee6= {
-    _id: "59637e6b7a5a2f794f5dc3ec",
+    _id: "59637e6b7a5a2f794f5dc3ec6",
 
     detailedInformation: {
       latitude: 48.888876237644006,
@@ -544,7 +546,7 @@ addNewCards() {
   }
 
   let cartee7= {
-    _id: "59637e6b7a5a2f794f5dc3ec",
+    _id: "59637e6b7a5a2f794f5dc3ec7",
 
     detailedInformation: {
       latitude: 48.888876237644006,
