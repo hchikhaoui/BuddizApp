@@ -13,8 +13,6 @@ import { OptionsPage } from '../../modals/sortie_options';
 import {Sortie} from '../../models/sortie'
 import {Carte} from '../../models/carte'
 
-import { Auth, User, UserDetails, IDetailedError } from '@ionic/cloud-angular';
-
 /**
  * Generated class for the VotePage page.
  *
@@ -40,29 +38,15 @@ export class VotePage {
       favoris: []
   }
 
-  public sorties: Array<Sortie> // = []
-  public ii: number
+constructor(public modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams, publicviewCtrl: ViewController, private dragulaService: DragulaService, public alertCtrl: AlertController) {
+    this.recherche.id = navParams.get('id');
+    this.recherche.nom = navParams.get('nom');
+    this.recherche.description = navParams.get('description');
+    this.recherche.date = navParams.get('date');
+    this.recherche.lieu = navParams.get('lieu');
+    this.recherche.cartes = navParams.get('cartes');
+    this.recherche.favoris = navParams.get('favoris');
 
-constructor(public auth:Auth, public user: User, public modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams, publicviewCtrl: ViewController, private dragulaService: DragulaService, public alertCtrl: AlertController) {
-
-  this.recherche.id = navParams.get('id');
-
-  if(!this.auth.isAuthenticated()){
-  this.recherche.nom = navParams.get('nom');
-  this.recherche.description = navParams.get('description');
-  this.recherche.date = navParams.get('date');
-  this.recherche.lieu = navParams.get('lieu');
-  this.recherche.cartes = navParams.get('cartes');
-  this.recherche.favoris = navParams.get('favoris');
-  }else{
-    this.sorties = this.user.get('sorties', null)
-    for(let s in this.sorties){
-      if(this.sorties[s].id == this.recherche.id ){
-        this.ii = this.sorties.indexOf(this.sorties[s])
-      }
-    }
-  }
-console.log(JSON.stringify('favoris: '+this.sorties[this.ii].favoris))
     dragulaService.setOptions('my-bag', {
         copy: false,                       // elements are moved by default, not copied
         copySortSource: true,             // elements in copy-source containers can be reordered
@@ -74,41 +58,10 @@ console.log(JSON.stringify('favoris: '+this.sorties[this.ii].favoris))
 }
 
 AjouterAuFavoris(item: Carte) {
-
-if(!this.auth.isAuthenticated()){
-var exist = false
-      for( let c in this.recherche.favoris ){
-        if(this.recherche.favoris[c]._id == item._id){
-          let alert = this.alertCtrl.create({
-            title:'existe dèjà!',
-            subTitle:'Vérifier vos favoris',
-            buttons:['OK']
-          });
-          alert.present();
-          exist = true
-        }
-      }
-      if(exist == false){
+    if (this.recherche.favoris.indexOf(item) == -1){
         this.recherche.favoris.push(item)
-      }
-}else{
-  var exist = false
-      for( let c in this.sorties[this.ii].favoris ){
-        if(this.sorties[this.ii].favoris[c]._id == item._id){
-          let alert = this.alertCtrl.create({
-            title:'existe dèjà!',
-            subTitle:'Vérifier vos favoris',
-            buttons:['OK']
-          });
-          alert.present();
-          exist = true
-        }
-      }
-      if(exist == false){
-        this.sorties[this.ii].favoris.push(item)
-      }
-}
-console.log(JSON.stringify('favoris: '+this.sorties[this.ii].favoris))
+        localStorage.setItem(this.recherche.id.toString(), JSON.stringify(this.recherche))
+    }
     this.q = item
 }
 

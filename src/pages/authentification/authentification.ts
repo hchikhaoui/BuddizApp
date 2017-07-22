@@ -1,6 +1,6 @@
 ﻿import { Component, ViewChild } from '@angular/core';
 import { IonicPage} from 'ionic-angular';
-import { Platform, MenuController, Nav, App } from 'ionic-angular';
+import { Platform, MenuController, Nav } from 'ionic-angular';
 
 import { AccueilPage } from '../accueil/accueil';
 import { SuggestionsPage } from '../suggestions/suggestions';
@@ -47,7 +47,7 @@ rootPage = AccueilPage;
 
   public token: string = ''
 
-//public logged: boolean = false;
+public logged: boolean = false;
 public showLogin:boolean = true;
 
 public constructor(
@@ -58,7 +58,6 @@ public constructor(
     public loadingCtrl:LoadingController,
     public platform: Platform,
     public menuCtrl: MenuController,
-    private app: App,
     ) {
   }
 
@@ -84,11 +83,21 @@ public constructor(
       let details: UserDetails = {'email':this.email, 'password':this.password};
 
       this.auth.login('basic', details, {'remember': false}).then((res: any) => {
+          this.user.set('birthday', '05/07/2002')
+          this.user.save()
+          //console.log(this.user.get('birthday', null))
+          //console.log(this.user.data.get('birthday', null))
+
+          console.log(this.user.details.name)
+          console.log(this.user.details.email)
+          console.log(this.user.details.password)
+          console.log(this.user.details.image)
+
         this.token = res.token
 
         loader.dismissAll();
-          this.app.getActiveNav().push(AccueilPage)
-      //  this.logged = true;
+        this.logged = true;
+        // this.nav.setRoot(AccueilPage);
       }
       , (err) => {
         loader.dismissAll();
@@ -108,6 +117,8 @@ public constructor(
     } else {
       this.showLogin = true;
     }
+
+//    this.viewCtrl.dismiss()
   }
 
   doRegister() {
@@ -136,7 +147,6 @@ public constructor(
 
       this.auth.signup(details).then(() => {
         loader.dismissAll();
-        this.showLogin = true
       }, (err:IDetailedError<string[]>) => {
         loader.dismissAll();
         let errors = '';
@@ -159,12 +169,12 @@ public constructor(
     } else {
       this.showLogin = false;
     }
+//    this.viewCtrl.dismiss()
   }
 
   doLogout(){
     this.auth.logout()
-    this.app.getActiveNav().push(AccueilPage)
-   // this.logged = false
+    this.logged = false
   }
 
   status(){

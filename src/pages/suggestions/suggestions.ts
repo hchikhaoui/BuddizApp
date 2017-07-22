@@ -1,6 +1,5 @@
 ﻿import { Component, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { IonicPage, NavController, NavParams, ModalController, AlertController } from 'ionic-angular';
-import { Auth, User, UserDetails, IDetailedError } from '@ionic/cloud-angular';
 import 'rxjs/Rx';
 import {
   StackConfig,
@@ -42,8 +41,8 @@ export class SuggestionsPage {
   public stackConfig: StackConfig;
   public msg: string = '';
 
-  public sorties: Array<Sortie> = []
-  public ii: number
+  public cartee: Carte
+
   public recherche: Sortie = {
       id: null,
       nom: '',
@@ -53,7 +52,8 @@ export class SuggestionsPage {
       cartes: [],
       favoris: []
   }
-  constructor(public auth:Auth, public user: User,public modalCtrl: ModalController, private http: Http, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,) {
+  constructor(public modalCtrl: ModalController, private http: Http, public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,) {
+
       if(navParams.get('id')){
         this.recherche.id = navParams.get('id')
       }else {
@@ -61,44 +61,18 @@ export class SuggestionsPage {
       }
       if(navParams.get('cartes')){
         this.recherche.cartes = navParams.get('cartes');
-        console.log(JSON.stringify('cartes: ' + this.recherche.cartes))
       }
     if(navParams.get('favoris')){
       this.recherche.favoris = navParams.get('favoris');
-      console.log(JSON.stringify('favoris: ' + this.recherche.favoris))
     }
+
       this.recherche.nom = navParams.get('nom');
       this.recherche.description = navParams.get('description');
       this.recherche.date = navParams.get('date');
       this.recherche.lieu = navParams.get('lieu');
 
-
-      if(this.auth.isAuthenticated())
-      {
-        if(this.user.get('sorties', null) == null){
-          this.sorties.push(this.recherche)
-          this.user.set('sorties', this.sorties)
-          this.user.save()
-        }else{
-          this.sorties = this.user.get('sorties', null)
-          let found = false
-          for(let i in this.sorties){
-            if(this.sorties[i].id == this.recherche.id){
-              this.ii = this.sorties.indexOf(this.sorties[i])
-              found = true
-            }
-          }
-          if(found == false){
-            this.sorties.push(this.recherche)
-            this.user.set('sorties', this.sorties)
-            this.user.save()
-          }
-        }
-      }
-
-
-
-    //localStorage.setItem(this.recherche.id.toString(), JSON.stringify(this.recherche))
+      // localStorage.clear()
+      localStorage.setItem(this.recherche.id.toString(), JSON.stringify(this.recherche))
 
       this.stackConfig = {
       throwOutConfidence: (offsetX, offsetY, element) => {
@@ -111,63 +85,6 @@ export class SuggestionsPage {
         return 800;
       }
     };
-  }
-
-  voteUp(like: boolean) {
-    var exist = false
-    this.removedCard = this.cards.pop()
-    this.recentCard = this.cards[this.cards.length - 1]
-    if (like) {
-      for( let c in this.recherche.cartes ){
-        if(this.recherche.cartes[c]._id == this.removedCard._id){
-          let alert = this.alertCtrl.create({
-            title:'existe dèjà!',
-            subTitle:'Vérifier vos cartes',
-            buttons:['OK']
-          });
-          alert.present();
-          exist = true
-        }
-      }
-
-      if(exist == false){
-        this.recherche.cartes.push(this.removedCard)
-
-        if(this.auth.isAuthenticated()){
-          if(this.user.get('sorties', null) == null){
-            this.sorties.push(this.recherche)
-            this.user.set('sorties', this.sorties)
-            this.user.save()
-          }else{
-            this.sorties = this.user.get('sorties', null)
-            let found = false
-            for(let i in this.sorties){
-              if(this.sorties[i].id == this.recherche.id){
-                this.ii = this.sorties.indexOf(this.sorties[i])
-                found = true
-              }
-            }
-            if(found == false){
-              this.sorties.push(this.recherche)
-              this.user.set('sorties', this.sorties)
-              this.user.save()
-            }else{
-              this.sorties[this.ii] = this.recherche
-              this.user.set('sorties', this.sorties)
-              this.user.save()
-            }
-          }
-        }
-        //localStorage.setItem(this.recherche.id.toString(), JSON.stringify(this.recherche))
-      }
-
-
-      this.msg = 'You liked: ' + this.removedCard._id;
-
-    } else {
-      this.msg = 'You disliked: ' + this.removedCard._id;
-    }
-
   }
 
 
@@ -216,7 +133,7 @@ private FixerHeader() {
 addNewCards() {
 
   let cartee1= {
-  _id: "59637e6b7a5a2f794f5dc3ec1",
+  _id: "59637e6b7a5a2f794f5dc3ec",
 
   detailedInformation: {
     latitude: 48.888876237644006,
@@ -271,7 +188,7 @@ addNewCards() {
 }
 
   let cartee2= {
-    _id: "59637e6b7a5a2f794f5dc3ec2",
+    _id: "59637e6b7a5a2f794f5dc3ec",
 
     detailedInformation: {
       latitude: 48.888876237644006,
@@ -326,7 +243,7 @@ addNewCards() {
   }
 
   let cartee3= {
-    _id: "59637e6b7a5a2f794f5dc3ec3",
+    _id: "59637e6b7a5a2f794f5dc3ec",
 
     detailedInformation: {
       latitude: 48.888876237644006,
@@ -381,7 +298,7 @@ addNewCards() {
   }
 
   let cartee4= {
-    _id: "59637e6b7a5a2f794f5dc3ec4",
+    _id: "59637e6b7a5a2f794f5dc3ec",
 
     detailedInformation: {
       latitude: 48.888876237644006,
@@ -436,7 +353,7 @@ addNewCards() {
   }
 
   let cartee5= {
-    _id: "59637e6b7a5a2f794f5dc3ec5",
+    _id: "59637e6b7a5a2f794f5dc3ec",
 
     detailedInformation: {
       latitude: 48.888876237644006,
@@ -491,7 +408,7 @@ addNewCards() {
   }
 
   let cartee6= {
-    _id: "59637e6b7a5a2f794f5dc3ec6",
+    _id: "59637e6b7a5a2f794f5dc3ec",
 
     detailedInformation: {
       latitude: 48.888876237644006,
@@ -546,7 +463,7 @@ addNewCards() {
   }
 
   let cartee7= {
-    _id: "59637e6b7a5a2f794f5dc3ec7",
+    _id: "59637e6b7a5a2f794f5dc3ec",
 
     detailedInformation: {
       latitude: 48.888876237644006,
@@ -611,6 +528,39 @@ addNewCards() {
 return this.cards
 //return this.http.get('https://appfront.dev.buddiz.io:443/search/596378e97a5a2f794f5dc3c2/elements/suggestions?useCase=places', this.FixerHeader()).subscribe((response: Response) => {console.log(response.json());this.cards = response.json()}, (error: any) => console.log('error data'));
 }
+
+voteUp(like: boolean) {
+var exist = false
+this.removedCard = this.cards.pop()
+this.recentCard = this.cards[this.cards.length - 1]
+if (like) {
+  for( let c in this.recherche.cartes ){
+    if(JSON.stringify(this.recherche.cartes[c]) == JSON.stringify(this.removedCard)){
+      let alert = this.alertCtrl.create({
+        title:'existe dèjà!',
+        subTitle:'Vérifier vos cartes',
+        buttons:['OK']
+      });
+      alert.present();
+      exist = true
+    }
+  }
+
+  if(exist == false){
+    this.recherche.cartes.push(this.removedCard)
+    localStorage.setItem(this.recherche.id.toString(), JSON.stringify(this.recherche))
+  }
+
+
+  this.msg = 'You liked: ' + this.removedCard._id;
+
+} else {
+    this.msg = 'You disliked: ' + this.removedCard._id;
+  }
+
+}
+
+
 
   Accueil(event){
     this.navCtrl.popToRoot()

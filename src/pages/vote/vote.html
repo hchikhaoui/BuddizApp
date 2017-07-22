@@ -40,35 +40,14 @@
   </div>
 
   <div>
-    <ion-slides *ngIf = 'auth.isAuthenticated()' style="margin: auto; width: 60%; padding: 10px">
-      <ion-slide *ngFor="let item of sorties[ii].cartes">
-        <img (click)=" AjouterAuFavoris(item)" style="width: 50vw;height: 25vh;margin: 20px auto;" *ngIf="item.providersData[0]" src="{{item.providersData[0].copyrightImageSrc}}" />
-      </ion-slide>
-    </ion-slides>
-
-    <ion-slides *ngIf = '!auth.isAuthenticated()' style="margin: auto; width: 60%; padding: 10px">
+    <ion-slides style="margin: auto; width: 60%; padding: 10px">
       <ion-slide *ngFor="let item of recherche.cartes">
         <img (click)=" AjouterAuFavoris(item)" style="width: 50vw;height: 25vh;margin: 20px auto;" *ngIf="item.providersData[0]" src="{{item.providersData[0].copyrightImageSrc}}" />
       </ion-slide>
     </ion-slides>
   </div>
   <div>
-    <ion-list *ngIf = 'auth.isAuthenticated()' [dragula]='"my-bag"' [dragulaModel]="sorties[ii].favoris">
-      <button (click)="PlusDetails(item2)" style="opacity:0.7; background-color: #E7FBCD;-webkit-box-shadow: 0px 8px 4px -4px rgba(163,163,163,0.25);-moz-box-shadow: 0px 8px 4px -4px rgba(163,163,163,0.25);box-shadow: 0px 8px 4px -4px rgba(163,163,163,0.25);border: 1px solid #dee2e3;" ion-item *ngFor="let item2 of sorties[ii].favoris">
-
-        <ion-avatar item-left>
-          <img-loader *ngIf="item2.providersData[0]" [src]="item2.providersData[0].copyrightImageSrc" useImg [spinner]="false"></img-loader>
-        </ion-avatar>
-        <h4>id: {{item2._id}}</h4>
-        <p>nombre de photos assciées: {{item2.providersData.length}}</p>
-        <ion-avatar item-right>
-          <img-loader *ngIf="item2.providersData[0]" [src]="item2.providersData[0].copyrightImageSrc" useImg [spinner]="false"></img-loader>
-        </ion-avatar>
-
-      </button>
-    </ion-list>
-
-    <ion-list *ngIf = '!auth.isAuthenticated()' [dragula]='"my-bag"' [dragulaModel]="recherche.favoris">
+    <ion-list [dragula]='"my-bag"' [dragulaModel]="recherche.favoris">
       <button (click)="PlusDetails(item2)" style="opacity:0.7; background-color: #E7FBCD;-webkit-box-shadow: 0px 8px 4px -4px rgba(163,163,163,0.25);-moz-box-shadow: 0px 8px 4px -4px rgba(163,163,163,0.25);box-shadow: 0px 8px 4px -4px rgba(163,163,163,0.25);border: 1px solid #dee2e3;" ion-item *ngFor="let item2 of recherche.favoris">
 
         <ion-avatar item-left>

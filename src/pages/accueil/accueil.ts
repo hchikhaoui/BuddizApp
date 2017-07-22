@@ -1,6 +1,6 @@
 ﻿import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, List, AlertController, ModalController } from 'ionic-angular';
-import { Auth, User, UserDetails, IDetailedError } from '@ionic/cloud-angular';
+
 //import { ModalPage } from '../modal/modal';
 import { CriteriaPage } from '../../modals/fixer_criteres';
 import { OptionsPage } from '../../modals/sortie_options';
@@ -22,10 +22,8 @@ instant = new Date().toISOString()
   public historiques: Array<Sortie> = []
   archive = [];
 
-  constructor(public auth:Auth, public user: User, public modalCtrl: ModalController, public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public modalCtrl: ModalController, public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams) {
 //  localStorage.clear()
-      // this.user.unset('sorties')
-      // this.user.save()
       this.HistoriqueDesRecherches()
   }
 
@@ -47,42 +45,23 @@ instant = new Date().toISOString()
 
   HistoriqueDesRecherches()
     {
-      this.historiques = this.user.get('sorties', null)
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      // for(let c in this.historiques){
-      //   console.log('historique: ' + c + '##########################################')
-      //   console.log(JSON.stringify(this.historiques[c].favoris))
-      // }
-      
-//      let j = 0
-//        for (var i = 0; i<localStorage.length; i++) {
-//            this.archive[i] = localStorage.getItem(localStorage.key(i));
-//            if (JSON.parse(this.archive[i])['lieu']) {
-//                j++
-//                this.historiques.push({
-//                  id: JSON.parse(this.archive[i])['id'],
-//                  nom: JSON.parse(this.archive[i])['nom'],
-//                  description: JSON.parse(this.archive[i])['description'],
-//                  date: JSON.parse(this.archive[i])['date'],
-//                  lieu: JSON.parse(this.archive[i])['lieu'],
-//                  cartes: JSON.parse(this.archive[i])['cartes'],
-//                  favoris: JSON.parse(this.archive[i])['favoris']
-//                })
-//                console.log(JSON.stringify(this.historiques))
-//            }
-//        }
+      let j = 0
+        for (var i = 0; i<localStorage.length; i++) {
+            this.archive[i] = localStorage.getItem(localStorage.key(i));
+            if (JSON.parse(this.archive[i])['lieu']) {
+                j++
+                this.historiques.push({
+                  id: JSON.parse(this.archive[i])['id'],
+                  nom: JSON.parse(this.archive[i])['nom'],
+                  description: JSON.parse(this.archive[i])['description'],
+                  date: JSON.parse(this.archive[i])['date'],
+                  lieu: JSON.parse(this.archive[i])['lieu'],
+                  cartes: JSON.parse(this.archive[i])['cartes'],
+                  favoris: JSON.parse(this.archive[i])['favoris']
+                })
+                console.log(JSON.stringify(this.historiques))
+            }
+        }
   }
 
   historique(event, hist) {

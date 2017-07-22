@@ -31,7 +31,7 @@
 
 <ion-content padding style="background-color: #F7FFED !important">
 
-  <div *ngIf = "auth.isAuthenticated()">
+  <div *ngIf = "logged">
     <img src="{{this.user.details.image}}" style="border-radius: 50%; -webkit-box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 1);
     -moz-box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 1);
     box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 1);
@@ -46,7 +46,7 @@
   </div>
 
 
-<div *ngIf="!auth.isAuthenticated()">
+<div *ngIf="!logged">
   <div *ngIf="showLogin">
     <ion-item>
       <ion-input type="email" placeholder="Email" [(ngModel)]="email"></ion-input>
