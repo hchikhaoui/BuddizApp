@@ -5,6 +5,7 @@ import { VotePage } from '../pages/vote/vote';
 import { SynthesePage } from '../pages/synthese/synthese';
 
 import { Sortie } from '../models/sortie'
+import {Utilisateur} from '../models/utilisateur'
 
 import { ViewController } from 'ionic-angular';
 
@@ -23,10 +24,26 @@ export class OptionsPage {
 
     public opt: string
     public hist: Array<Sortie>
+    public utilisateur: Utilisateur = {
+    _id: '',
+    userProfile: {userName: '', userMail: ''},
+    deviceTokens: [],
+    searches: [],
+    accessControl: {
+      appRoles: [],
+      appGroups: [],
+      users: [],
+      groups: [],
+      permissions: []
+    }
+  }
 
     constructor(public viewCtrl: ViewController, public navCtrl: NavController, public navParams: NavParams) {
         this.opt = navParams.get('opt')
         this.hist = navParams.get('hist')
+        if(localStorage.getItem(navParams.get('user_id'))){
+            this.utilisateur = JSON.parse(localStorage.getItem(navParams.get('user_id')));
+        }
     }
 
   closeModal() {
@@ -35,37 +52,12 @@ export class OptionsPage {
 
     itemTapped(event, h) {
         if(this.opt == 'Suggestions'){
-            this.navCtrl.push(SuggestionsPage, {
-            id: h.id,
-            nom: h.nom,
-            description: h.description,
-            date: h.date,
-            lieu: h.lieu,
-            cartes: h.cartes,
-            favoris: h.favoris,
-        })
+            this.navCtrl.setRoot(SuggestionsPage, {sortie: h, user_id: this.utilisateur._id})
         }else if(this.opt == 'Vote'){
-            this.navCtrl.push(VotePage, {
-            id: h.id,
-            nom: h.nom,
-            description: h.description,
-            date: h.date,
-            lieu: h.lieu,
-            cartes: h.cartes,
-            favoris: h.favoris,
-        })
+            this.navCtrl.setRoot(VotePage, {sortie: h, user_id: this.utilisateur._id});
         }else {
-          this.navCtrl.push(SynthesePage, {
-            id: h.id,
-            nom: h.nom,
-            description: h.description,
-            date: h.date,
-            lieu: h.lieu,
-            favoris: h.favoris,
-        })
+          this.navCtrl.setRoot(SynthesePage, {sortie: h, user_id: this.utilisateur._id})
         }
-      this.viewCtrl.dismiss()
-
     }
     ionViewDidLoad() {
         console.log('ionViewDidLoad OptionsPage');

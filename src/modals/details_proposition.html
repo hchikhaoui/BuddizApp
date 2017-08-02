@@ -11,7 +11,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding style="background-color: #F7FFED !important">
+<ion-content padding id="e1">
 
   <div>
 
@@ -26,13 +26,10 @@
 
   <flash-card *ngFor="let item of plusdephotos">
             <div class="flash-card-front">
-              <img style="width: 75vw; height: 50vh; margin: 0; position: absolute; top: 0; left: 0;" *ngIf="item.copyrightImageSrc"  src="{{item.copyrightImageSrc}}" />
+              <img id="e2" src="{{item}}" />
             </div>
             <div class="flash-card-back">
-              <ion-label>elementName: {{item.elementName}} </ion-label>
-              <ion-label>elementId: {{item.elementId}} </ion-label>
-              <ion-label>providerName: {{item.providerName}} </ion-label>
-              <ion-label>lastUpdate: {{item.lastUpdate}} </ion-label>
+              <ion-label>elementName: {{item}} </ion-label>
             </div>
   </flash-card>
 

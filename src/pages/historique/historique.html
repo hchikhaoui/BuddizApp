@@ -10,7 +10,7 @@
       <ion-icon name="menu"></ion-icon>
     </button>-->
 
-  <div style="display:inline-block" (click)="Accueil($event)">
+  <div id="e1" (click)="Accueil($event)">
     <img  src="https://innovatorsrace50.com/uploads/e60944c8cb03e6821caff8fd4d6deba7/company_picture_18524_58ac738d2df16.png" width="40px"  height="40px"/>
   </div>
     <ion-title style="display:inline-block">Historique</ion-title>
@@ -22,34 +22,32 @@
 </ion-header>
 
 
-<ion-content padding style="background-image: url('http://imgwallpaper.info/download/20151130/city-blur-evening-lights-1920x1200.jpg');">
+<ion-content padding id="e2">
 
-<div style="background-color: #e3ffee; ; opacity:0.3  ; margin: auto; width: 60%; border: 3px solid #8f8f8f ; padding: 10px">
-  <ion-label>id: {{ histoire.id }}</ion-label>
-  <ion-label>nom: {{ histoire.nom }}</ion-label>
-  <ion-label>description: {{ histoire.description }}</ion-label>
-  <ion-label>date: {{ histoire.date }}</ion-label>
-  <ion-label>lieu: {{ histoire.lieu }}</ion-label>
+<div id="e3">
+  <ion-label>id: {{ sortie._id }}</ion-label>
+  <ion-label>nom: {{ sortie.searchParameters.name }}</ion-label>
+  <ion-label>date: {{ sortie.created_At }}</ion-label>
 </div>
 
-<div style="margin: auto; padding: 10px" *ngIf="carte">
+<div id="e4" *ngIf="element">
     <flash-card>
       <div class="flash-card-front">
-        <img style="width: 75vw; height: 50vh; margin: 0; position: absolute; top: 0; left: 0;" *ngIf="carte.providersData[0]" src="{{carte.providersData[0].copyrightImageSrc}}" />
+        <img id="e5" *ngIf="elmt.comments[0].photo" src="{{elmt.comments[0].photo}}" />
       </div>
       <div class="flash-card-back">
-        <ion-label>carte Id: {{carte._id}} </ion-label>
-        <ion-label>carte nom: {{carte.detailedInformation.name}} </ion-label>
-        <ion-label>carte latitude: {{carte.detailedInformation.latitude}} </ion-label>
-        <ion-label>carte longitude: {{carte.detailedInformation.longitude}} </ion-label>
+        <ion-label>Element Id: {{element._id}} </ion-label>
+        <ion-label>Element nom: {{element.basicParameters.name}} </ion-label>
+        <ion-label>Element latitude: {{element.detailedInformation.latitude}} </ion-label>
+        <ion-label>Element longitude: {{element.detailedInformation.longitude}} </ion-label>
       </div>
     </flash-card>
   </div>
 
   <div>
-    <ion-slides style="margin: auto; width: 60%; padding: 10px">
-      <ion-slide *ngFor="let image of histoire.cartes ">
-        <img (click)=" AfficherDetails(image)" *ngIf="image.providersData[0].copyrightImageSrc" style="width: 50vw;height: 25vh;margin: 20px auto;" src="{{image.providersData[0].copyrightImageSrc}}" />
+    <ion-slides id="e6">
+      <ion-slide *ngFor="let elmt of sortie.elementSelected ">
+        <img (click)=" AfficherDetails(elmt)" *ngIf="elmt.comments[0].photo" id="e7" src="{{elmt.comments[0].photo}}" />
       </ion-slide>
     </ion-slides>
   </div>

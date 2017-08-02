@@ -28,7 +28,7 @@ import { SwingModule } from 'angular2-swing';
 
 import {Sortie} from '../models/sortie'
 import {Carte} from '../models/carte';
-import {Client} from '../models/client';
+import {Utilisateur} from '../models/utilisateur';
 
 const cloudSettings: CloudSettings = {
   'core': {

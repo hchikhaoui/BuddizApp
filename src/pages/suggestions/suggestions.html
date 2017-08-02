@@ -8,33 +8,41 @@
 
   <ion-navbar>
 
-    <div style="display:inline-block" (click)="Accueil($event)">
+    <div id="e1" (click)="Accueil($event)">
       <img  src="https://innovatorsrace50.com/uploads/e60944c8cb03e6821caff8fd4d6deba7/company_picture_18524_58ac738d2df16.png" width="40px"  height="40px"/>
     </div>
-    <ion-title style="display:inline-block" >Suggestions</ion-title>
+    <ion-title id="e1" >Suggestions</ion-title>
 
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding style="background-image: url('http://ngn-mag.com/image/wallpaper/fond-decran-blur-142.jpg');">
+<ion-content padding id="e2">
 
-  <div style="background-color: #e3ffee; ; opacity:0.3  ; margin: auto; width: 60%; border: 3px solid #8f8f8f ; padding: 10px">
-    <ion-label>id: {{ recherche.id }}</ion-label>
-    <ion-label>nom: {{ recherche.nom }}</ion-label>
-    <ion-label>description: {{ recherche.description }}</ion-label>
-    <ion-label>date: {{ recherche.date }}</ion-label>
-    <ion-label>lieu: {{ recherche.lieu }}</ion-label>
-
+  <div id="e3">
+    <ion-label>id: {{ sortie._id }}</ion-label>
+    <ion-label>nom: {{ sortie.searchParameters.name }}</ion-label>
+    <ion-label>Cas d'utilisation: {{ sortie.searchParameters.useCase }}</ion-label>
+    <ion-label>date: {{ sortie.created_At }}</ion-label>
   </div>
 
 <div swing-stack #myswing1 [stackConfig]="stackConfig" (throwoutleft)="voteUp(false)" (throwoutright)="voteUp(true)" id="card-stack">
-    <ion-card #mycards1 swing-card *ngFor="let c of cards">
+    <ion-card #mycards1 swing-card *ngFor="let e of elements">
       <ion-card-content>
-
+          
         <ion-row>
-          <img   *ngIf="c.providersData[0]" src="{{c.providersData[0].copyrightImageSrc}}" />
+          <ion-list>
+            <label *ngIf="e._id"><h5>Id: {{e._id}}</h5></label>
+            <label *ngIf="e.detailedInformation.latitude">latitude: {{e.detailedInformation.latitude}}</label>
+            <label *ngIf="e.detailedInformation.longitude">longitude: {{e.detailedInformation.longitude}}</label>
+            <label *ngIf="e.detailedInformation.address">address: {{e.detailedInformation.address}}</label>
+            <label *ngIf="e.detailedInformation.useCase">useCase: {{e.detailedInformation.useCase}}</label>
+            <label *ngIf="e.detailedInformation.phoneNumber">phoneNumber: {{e.detailedInformation.phoneNumber}}</label>
+            <label *ngIf="e.detailedInformation.website">website: {{e.detailedInformation.website}}</label>
+            <label *ngIf="e.detailedInformation.rating">rating: {{e.detailedInformation.rating}}</label>
+          </ion-list>
+          <!--<img   *ngIf="e.comments[0].attributions[0].photo" src="{{e.comments[0].attributions[0].photo}}" />-->
         </ion-row>
 
         <ion-row>
@@ -55,14 +63,21 @@
     </ion-card-content>
     </ion-card>
   </div>
-  <div style="background-color: #e3ffee; ; opacity:0.3  ; margin: auto; width: 60%; border: 3px solid #8f8f8f ; padding: 10px" *ngIf=" removedCard">
-    <div *ngIf=" recentCard">
-      <h5>Id: {{recentCard._id}}</h5><br />
-      <h4>latitude: {{recentCard.detailedInformation.latitude}}</h4>
-      <h4>longitude: {{recentCard.detailedInformation.longitude}}</h4>
-    </div>
-    <p style="text-align: center; width: 100%;">{{ msg }}</p>
+  <div id="e4" *ngIf=" removedElement">
+      <p id="e5">{{ msg }}</p>
   </div>
+<!--
+    <div id="e3">
+    <div *ngFor="let e of elements">
+          <label *ngIf="e.detailedInformation.latitude">latitude: {{e.detailedInformation.latitude}}</label>
+          <label *ngIf="e.detailedInformation.longitude">longitude: {{e.detailedInformation.longitude}}</label>
+          <label *ngIf="e.detailedInformation.address">address: {{e.detailedInformation.address}}</label>
+          <label *ngIf="e.detailedInformation.useCase">useCase: {{e.detailedInformation.useCase}}</label>
+          <label *ngIf="e.detailedInformation.phoneNumber">phoneNumber: {{e.detailedInformation.phoneNumber}}</label>
+          <label *ngIf="e.detailedInformation.website">website: {{e.detailedInformation.website}}</label>
+          <label *ngIf="e.detailedInformation.rating">rating: {{e.detailedInformation.rating}}</label>
+    </div>
+  </div>-->
 
 </ion-content>
 
@@ -87,90 +102,3 @@
 
   </ion-toolbar>
 </ion-footer>
-
-
-
-
-
-<!--{"previewHeight":100,"likes":96,"favorites":55,"tags":"macro, flower, nature","webformatHeight":428,"views":14124,"webformatWidth":640,"previewWidth":150,"comments":16,"downloads":3030,"pageURL":"https://pixabay.com/en/macro-flower-nature-yellow-blossom-56410/","previewURL":"https://cdn.pixabay.com/photo/2012/09/08/21/39/macro-56410_150.jpg","webformatURL":"https://pixabay.com/get/ec33b50e28e90825d0471400ee484796eb72ffd41db8184794f3c170a5_640.jpg","imageWidth":3872,"user_id":9003,"user":"Albenheim","type":"photo","id":56410,"userImageURL":"https://cdn.pixabay.com/user/2012/09/08/21-14-56-990_250x250.jpg","imageHeight":2592}
-
-{"previewHeight":100,"likes":96,"favorites":55,"tags":"macro, flower, nature","webformatHeight":428,"views":14124,"webformatWidth":640,"previewWidth":150,"comments":16,"downloads":3030,"pageURL":"https://pixabay.com/en/macro-flower-nature-yellow-blossom-56410/","previewURL":"https://cdn.pixabay.com/photo/2012/09/08/21/39/macro-56410_150.jpg","webformatURL":"https://pixabay.com/get/ec33b50e28e90825d0471400ee484796eb72ffd41db8184794f3c170a5_640.jpg","imageWidth":3872,"user_id":9003,"user":"Albenheim","type":"photo","id":56410,"userImageURL":"https://cdn.pixabay.com/user/2012/09/08/21-14-56-990_250x250.jpg","imageHeight":2592}-->
-
-
-
-<!--{"previewHeight":100,"likes":96,"favorites":55,"tags":"macro, flower, nature","webformatHeight":428,"views":14124,"webformatWidth":640,"previewWidth":150,"comments":16,"downloads":3030,"pageURL":"https://pixabay.com/en/macro-flower-nature-yellow-blossom-56410/","previewURL":"https://cdn.pixabay.com/photo/2012/09/08/21/39/macro-56410_150.jpg","webformatURL":"https://pixabay.com/get/ec33b50e28e90825d0471400ee484796eb72ffd41db8184794f3c170a5_640.jpg","imageWidth":3872,"user_id":9003,"user":"Albenheim","type":"photo","id":56410,"userImageURL":"https://cdn.pixabay.com/user/2012/09/08/21-14-56-990_250x250.jpg","imageHeight":2592}
-
-
-[{"previewHeight":100,"likes":96,"favorites":55,"tags":"macro, flower, nature","webformatHeight":428,"views":14124,"webformatWidth":640,"previewWidth":150,"comments":16,"downloads":3030,"pageURL":"https://pixabay.com/en/macro-flower-nature-yellow-blossom-56410/","previewURL":"https://cdn.pixabay.com/photo/2012/09/08/21/39/macro-56410_150.jpg","webformatURL":"https://pixabay.com/get/ec33b50e28e90825d0471400ee484796eb72ffd41db8184794f3c170a5_640.jpg","imageWidth":3872,"user_id":9003,"user":"Albenheim","type":"photo","id":56410,"userImageURL":"https://cdn.pixabay.com/user/2012/09/08/21-14-56-990_250x250.jpg","imageHeight":2592},
-
-{"previewHeight":99,"likes":134,"favorites":137,"tags":"yellow, flower, wood","webformatHeight":426,"views":34413,"webformatWidth":640,"previewWidth":150,"comments":25,"downloads":15525,"pageURL":"https://pixabay.com/en/yellow-flower-wood-370256/","previewURL":"https://cdn.pixabay.com/photo/2014/06/17/07/21/yellow-370256_150.jpg","webformatURL":"https://pixabay.com/get/ea32b10d2df21c2ad65a5854e3444297e37fe7c818b5184893f1c279aeef_640.jpg","imageWidth":5184,"user_id":299467,"user":"elektrosmart","type":"photo","id":370256,"userImageURL":"https://cdn.pixabay.com/user/2014/06/18/11-30-30-400_250x250.jpg","imageHeight":3456},
-
-{"previewHeight":100,"likes":96,"favorites":55,"tags":"macro, flower, nature","webformatHeight":428,"views":14124,"webformatWidth":640,"previewWidth":150,"comments":16,"downloads":3030,"pageURL":"https://pixabay.com/en/macro-flower-nature-yellow-blossom-56410/","previewURL":"https://cdn.pixabay.com/photo/2012/09/08/21/39/macro-56410_150.jpg","webformatURL":"https://pixabay.com/get/ec33b50e28e90825d0471400ee484796eb72ffd41db8184794f3c170a5_640.jpg","imageWidth":3872,"user_id":9003,"user":"Albenheim","type":"photo","id":56410,"userImageURL":"https://cdn.pixabay.com/user/2012/09/08/21-14-56-990_250x250.jpg","imageHeight":2592}]-->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--[{"id":5234764425191,"nom":"sortie passée","description":"description passée","date":"2017-07-09T21:47:12.443Z","lieu":"lens",
-
-"cartes":[
-
-{"previewHeight":100,"likes":96,"favorites":55,"tags":"macro, flower, nature","webformatHeight":428,"views":14124,"webformatWidth":640,"previewWidth":150,"comments":16,"downloads":3030,"pageURL":"https://pixabay.com/en/macro-flower-nature-yellow-blossom-56410/","previewURL":"https://cdn.pixabay.com/photo/2012/09/08/21/39/macro-56410_150.jpg","webformatURL":"https://pixabay.com/get/ec33b50e28e90825d0471400ee484796eb72ffd41db8184794f3c170a5_640.jpg","imageWidth":3872,"user_id":9003,"user":"Albenheim","type":"photo","id":56410,"userImageURL":"https://cdn.pixabay.com/user/2012/09/08/21-14-56-990_250x250.jpg","imageHeight":2592},
-
-{"previewHeight":99,"likes":134,"favorites":137,"tags":"yellow, flower, wood","webformatHeight":426,"views":34413,"webformatWidth":640,"previewWidth":150,"comments":25,"downloads":15525,"pageURL":"https://pixabay.com/en/yellow-flower-wood-370256/","previewURL":"https://cdn.pixabay.com/photo/2014/06/17/07/21/yellow-370256_150.jpg","webformatURL":"https://pixabay.com/get/ea32b10d2df21c2ad65a5854e3444297e37fe7c818b5184893f1c279aeef_640.jpg","imageWidth":5184,"user_id":299467,"user":"elektrosmart","type":"photo","id":370256,"userImageURL":"https://cdn.pixabay.com/user/2014/06/18/11-30-30-400_250x250.jpg","imageHeight":3456},
-
-{"previewHeight":100,"likes":96,"favorites":55,"tags":"macro, flower, nature","webformatHeight":428,"views":14124,"webformatWidth":640,"previewWidth":150,"comments":16,"downloads":3030,"pageURL":"https://pixabay.com/en/macro-flower-nature-yellow-blossom-56410/","previewURL":"https://cdn.pixabay.com/photo/2012/09/08/21/39/macro-56410_150.jpg","webformatURL":"https://pixabay.com/get/ec33b50e28e90825d0471400ee484796eb72ffd41db8184794f3c170a5_640.jpg","imageWidth":3872,"user_id":9003,"user":"Albenheim","type":"photo","id":56410,"userImageURL":"https://cdn.pixabay.com/user/2012/09/08/21-14-56-990_250x250.jpg","imageHeight":2592}]}]-->
-
-
-
-<!--{"previewHeight":100,
-"likes":96,
-"favorites":55,
-"tags":"macro, flower, nature",
-"webformatHeight":428,
-"views":14124,
-"webformatWidth":640,
-"previewWidth":150,
-"comments":16,"
-downloads":3030,
-"pageURL":"https://pixabay.com/en/macro-flower-nature-yellow-blossom-56410/","previewURL":"https://cdn.pixabay.com/photo/2012/09/08/21/39/macro-56410_150.jpg","webformatURL":"https://pixabay.com/get/ec33b50e28e90825d0471400ee484796eb72ffd41db8184794f3c170a5_640.jpg","imageWidth":3872,
-"user_id":9003,
-"user":"Albenheim",
-"type":"photo",
-"id":56410,
-"userImageURL":"https://cdn.pixabay.com/user/2012/09/08/21-14-56-990_250x250.jpg",
-"imageHeight":2592
-}
-
-{"previewHeight":100,
-"likes":96,
-"favorites":55,
-"tags":"macro, flower, nature",
-"webformatHeight":428,
-"views":14124,
-"webformatWidth":640,
-"previewWidth":150,
-"comments":16,"
-downloads":3030,
-"pageURL":"https://pixabay.com/en/macro-flower-nature-yellow-blossom-56410/","previewURL":"https://cdn.pixabay.com/photo/2012/09/08/21/39/macro-56410_150.jpg","webformatURL":"https://pixabay.com/get/ec33b50e28e90825d0471400ee484796eb72ffd41db8184794f3c170a5_640.jpg","imageWidth":3872,
-"user_id":9003,
-"user":"Albenheim",
-"type":"photo",
-"id":56410,
-"userImageURL":"https://cdn.pixabay.com/user/2012/09/08/21-14-56-990_250x250.jpg",
-"imageHeight":2592
-}-->

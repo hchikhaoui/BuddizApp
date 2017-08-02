@@ -1,8 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
+import { Auth, User, UserDetails, IDetailedError } from '@ionic/cloud-angular';
+import {AccueilPage} from '../accueil/accueil'
 
 import {Sortie} from '../../models/sortie'
 import {Carte} from '../../models/carte'
+import {Elementt} from '../../models/elementt'
+import {Utilisateur} from '../../models/utilisateur'
 /**
  * Generated class for the historiquePage page.
  *
@@ -16,32 +20,55 @@ import {Carte} from '../../models/carte'
 })
 export class HistoriquePage {
 
-public carte: Carte
-public histoire:Sortie = {
-      id: null,
-      nom: '',
-      description: '',
-      date: new Date().toISOString(),
-      lieu: '',
-      cartes: [],
-      favoris: []
+public element: Elementt
+public sortie:Sortie = {
+  accessControl:{
+    userPermissionsOnApp: [],
+    userPermissionsOnObject: [],
+    users: ''
+  },
+  _id: '',
+  searchParameters:{
+    useCase: '',
+    useCaseParams: [], 
+      isOpen: '',
+      name: '',
+      timeStamp: null
+    },
+      elementSelected: [],
+      elementExcluded: [],
+      elementLiked: [],
+      elementDisliked: [],
+      created_At: null
+}
+
+public utilisateur: Utilisateur = {
+    _id: '',
+    userProfile: {userName: '', userMail: ''},
+    deviceTokens: [],
+    searches: [],
+    accessControl: {
+      appRoles: [],
+      appGroups: [],
+      users: [],
+      groups: [],
+      permissions: []
     }
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.histoire.id = navParams.get('id');
-    this.histoire.nom = navParams.get('nom');
-    this.histoire.description = navParams.get('description');
-    this.histoire.date = navParams.get('date');
-    this.histoire.lieu = navParams.get('lieu');
-    this.histoire.cartes = navParams.get('cartes');
-    this.histoire.favoris = navParams.get('favoris')
   }
 
-  AfficherDetails(image: Carte){
-    this.carte = image
+  constructor(public app: App, public auth:Auth, public user: User, public navCtrl: NavController, public navParams: NavParams) {
+    this.sortie = navParams.get('hist');
+    if(localStorage.getItem(navParams.get('user_id'))){
+      this.utilisateur = JSON.parse(localStorage.getItem(navParams.get('user_id')));
+    }
+  }
+
+  AfficherDetails(elmt: Elementt){
+    this.element = elmt
   }
 
   Accueil(ev){
-    this.navCtrl.popToRoot()
+    this.navCtrl.setRoot(AccueilPage, {user_id: this.utilisateur._id})
   }
 
   ionViewDidLoad() {

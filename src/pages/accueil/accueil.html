@@ -25,43 +25,39 @@
 </ion-header>
 
 
-<ion-content padding style="background-image: url('https://goodies.pcastuces.com/vignettes/9554_l.jpg');">
+<ion-content padding id="e5">
 
  <button ion-button color="secondary" large round block (click)="CriteriaModal()">Organiser une sortie</button>
 
 <ion-list>
 
-<ion-list-header style="background-color: #e6e6e6 !important; opacity:0.3">
+<ion-list-header id="e1">
     Sorties passées
 </ion-list-header>
 <div *ngFor="let h of historiques">
-  <ion-item style="background-color: #E7FBCD !important; opacity:0.7" *ngIf=" h.date < instant ">
+  <ion-item id="e2" *ngIf=" h.created_At < instant ">
     <ion-thumbnail item-start>
-      <img *ngIf="h.cartes[0]" src="{{h.cartes[0].providersData[0].copyrightImageSrc}}">
+      <img *ngIf="h.elementLiked[0].comments[0].attributions[0].photo" src="{{h.elementLiked[0].comments[0].attributions[0].photo}}">
     </ion-thumbnail>
-    <div>
-    <p>id: {{h.id}} </p>
-    <h2>nom: {{h.nom}}</h2>
-    <p>date: {{h.date}} </p>
-    <p>lieu: {{h.lieu}} </p>
+    <p *ngIf="h._id">id: {{h._id}} </p>
+    <h2 *ngIf="h.searchParameters.name">nom: {{h.searchParameters.name}}</h2>
+    <p *ngIf="h.created_At">date: {{h.created_At}} </p>
     <button ion-button outline (click)="historique($event, h)" item-end>View</button>
-    </div>
   </ion-item>
 </div>
 
-<ion-list-header style="background-color: #e6e6e6 !important; opacity:0.3">
+<ion-list-header id="e3">
     Sorties à venir
 </ion-list-header>
 <div *ngFor="let h of historiques">
-  <ion-item *ngIf=" h.date > instant " style="background-color: #E7FBCD !important; opacity:0.7" >
+  <ion-item *ngIf=" h.created_At > instant " id="e4" >
     <ion-thumbnail item-start>
-      <img *ngIf="h.cartes[0]" src="{{h.cartes[0].providersData[0].copyrightImageSrc}}">
+      <img *ngIf="h.elementLiked[0].comments[0].attributions[0].photo" src="{{h.elementLiked[0].comments[0].attributions[0].photo}}">
     </ion-thumbnail>
-    <p>id: {{h.id}} </p>
-    <h2>nom: {{h.nom}}</h2>
-    <p>date: {{h.date}} </p>
-    <p>lieu: {{h.lieu}} </p>
-    <button ion-button outline clear (click)="historique($event, h)" item-end>View</button>
+    <p *ngIf="h._id">id: {{h._id}} </p>
+    <h2 *ngIf="h.searchParameters.name">nom: {{h.searchParameters.name}}</h2>
+    <p *ngIf="h.created_At">date: {{h.created_At}} </p>
+    <button ion-button outline (click)="historique($event, h)" item-end>View</button>
   </ion-item>
 </div>
 

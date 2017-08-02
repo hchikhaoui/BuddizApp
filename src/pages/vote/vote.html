@@ -15,20 +15,19 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding style="background-image: url('https://drscdn.500px.org/photo/52710426/q%3D80_m%3D1500/ac3fc98522484898839115fe3c931a33');">
+<ion-content padding id="e1">
 
-<div style="background-color: #e3ffee; ; opacity:0.3  ; margin: auto; width: 60%; border: 3px solid #8f8f8f ; padding: 10px">
-  <p>id: {{recherche.id}}</p>
-  <p>nom: {{recherche.nom}}</p>
-  <p>description: {{recherche.description}}</p>
-  <p>date: {{recherche.date}}</p>
-  <p>lieu: {{recherche.lieu}}</p>
+<div id="e2">
+  <p>id: {{sortie._id}}</p>
+  <p>nom: {{sortie.searchParameters.name}}</p>
+  <p>description: {{sortie.searchParameters.useCase}}</p>
+  <p>date: {{sortie.created_At}}</p>
 </div>
 
-  <div style="margin: auto; padding: 10px" *ngIf="q">
+  <div id="e3" *ngIf="q">
     <flash-card>
       <div class="flash-card-front">
-        <img style="width: 75vw; height: 50vh; margin: 0; position: absolute; top: 0; left: 0;" *ngIf="q.providersData[0]" src="{{q.providersData[0].copyrightImageSrc}}" />
+        <img id="e4" *ngIf="q.comments[0].attributions[0].photo" src="{{q.comments[0].attributions[0].photo}}" />
       </div>
       <div class="flash-card-back">
         <ion-label>carte Id: {{q._id}} </ion-label>
@@ -40,23 +39,23 @@
   </div>
 
   <div>
-    <ion-slides style="margin: auto; width: 60%; padding: 10px">
-      <ion-slide *ngFor="let item of recherche.cartes">
-        <img (click)=" AjouterAuFavoris(item)" style="width: 50vw;height: 25vh;margin: 20px auto;" *ngIf="item.providersData[0]" src="{{item.providersData[0].copyrightImageSrc}}" />
+    <ion-slides id="e5">
+      <ion-slide *ngFor="let item of sortie.elementLiked">
+        <img (click)=" AjouterAuFavoris(item)" id="e6" *ngIf="item.comments[0].attributions[0].photo" src="{{item.comments[0].attributions[0].photo}}" />
       </ion-slide>
     </ion-slides>
   </div>
   <div>
-    <ion-list [dragula]='"my-bag"' [dragulaModel]="recherche.favoris">
-      <button (click)="PlusDetails(item2)" style="opacity:0.7; background-color: #E7FBCD;-webkit-box-shadow: 0px 8px 4px -4px rgba(163,163,163,0.25);-moz-box-shadow: 0px 8px 4px -4px rgba(163,163,163,0.25);box-shadow: 0px 8px 4px -4px rgba(163,163,163,0.25);border: 1px solid #dee2e3;" ion-item *ngFor="let item2 of recherche.favoris">
+
+    <ion-list [dragula]='"my-bag"' [dragulaModel]="sortie.elementSelected">
+      <button (click)="PlusDetails(item2)" id="e7" ion-item *ngFor="let item2 of sortie.elementSelected">
 
         <ion-avatar item-left>
-          <img-loader *ngIf="item2.providersData[0]" [src]="item2.providersData[0].copyrightImageSrc" useImg [spinner]="false"></img-loader>
+          <img-loader *ngIf="item2.comments[0].attributions[0].photo" [src]="item2.comments[0].attributions[0].photo" useImg [spinner]="false"></img-loader>
         </ion-avatar>
         <h4>id: {{item2._id}}</h4>
-        <p>nombre de photos assciées: {{item2.providersData.length}}</p>
         <ion-avatar item-right>
-          <img-loader *ngIf="item2.providersData[0]" [src]="item2.providersData[0].copyrightImageSrc" useImg [spinner]="false"></img-loader>
+          <img-loader *ngIf="item2.comments[0].attributions[0].photo" [src]="item2.comments[0].attributions[0].photo" useImg [spinner]="false"></img-loader>
         </ion-avatar>
 
       </button>

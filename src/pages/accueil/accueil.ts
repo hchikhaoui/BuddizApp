@@ -1,81 +1,84 @@
 ﻿import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, List, AlertController, ModalController } from 'ionic-angular';
+import { Auth, User, UserDetails, IDetailedError } from '@ionic/cloud-angular';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 
-//import { ModalPage } from '../modal/modal';
 import { CriteriaPage } from '../../modals/fixer_criteres';
 import { OptionsPage } from '../../modals/sortie_options';
 import { HistoriquePage } from '../historique/historique';
-import { SuggestionsPage } from '../suggestions/suggestions';
-import { VotePage } from '../vote/vote';
-import { SynthesePage } from '../synthese/synthese';
-import { NavigationPage } from '../navigation/navigation';
-import { AuthentificationPage } from '../authentification/authentification';
+
+import {Utilisateur} from '../../models/utilisateur'
 
 import {Sortie} from '../../models/sortie'
+
+
 @Component({
   selector: 'page-accueil',
   templateUrl: 'accueil.html'
 })
+
 export class AccueilPage {
 
-instant = new Date().toISOString()
+  public instant = new Date().toISOString()
   public historiques: Array<Sortie> = []
-  archive = [];
 
-  constructor(public modalCtrl: ModalController, public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams) {
-//  localStorage.clear()
+  public utilisateur: Utilisateur = {
+    _id: '',
+    userProfile: {userName: '', userMail: ''},
+    deviceTokens: [],
+    searches: [],
+    accessControl: {
+      appRoles: [],
+      appGroups: [],
+      users: [],
+      groups: [],
+      permissions: []
+    }
+  }
+
+  constructor(public auth:Auth, public user: User, public modalCtrl: ModalController, public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, private http: Http) {
+      console.log(JSON.parse(localStorage.getItem(navParams.get('user_id'))))
+      if(localStorage.getItem(navParams.get('user_id'))){
+        this.utilisateur = JSON.parse(localStorage.getItem(navParams.get('user_id')));
+      }
+      this.http.get('https://appfront.dev.buddiz.io:443/user/token/device', this.FixerHeaderGET()).subscribe((response: Response) => {console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'+response.json())}, (error: any) => console.log('error data')) 
       this.HistoriqueDesRecherches()
   }
 
 
   CriteriaModal() {
-    let modal = this.modalCtrl.create(CriteriaPage);
+    let modal = this.modalCtrl.create(CriteriaPage, {user_id: this.utilisateur._id});
     modal.present();
   }
 
 
   OptionsModal(option: string){
-    let modal = this.modalCtrl.create(OptionsPage,{opt: option, hist: this.historiques});
+    let modal = this.modalCtrl.create(OptionsPage,{opt: option, hist: this.historiques, user_id: this.utilisateur._id});
     modal.present();
   }
 
   Accueil(event){
-    this.navCtrl.popToRoot()
+    this.navCtrl.setRoot(AccueilPage,{user_id: this.utilisateur._id})
   }
 
-  HistoriqueDesRecherches()
-    {
-      let j = 0
-        for (var i = 0; i<localStorage.length; i++) {
-            this.archive[i] = localStorage.getItem(localStorage.key(i));
-            if (JSON.parse(this.archive[i])['lieu']) {
-                j++
-                this.historiques.push({
-                  id: JSON.parse(this.archive[i])['id'],
-                  nom: JSON.parse(this.archive[i])['nom'],
-                  description: JSON.parse(this.archive[i])['description'],
-                  date: JSON.parse(this.archive[i])['date'],
-                  lieu: JSON.parse(this.archive[i])['lieu'],
-                  cartes: JSON.parse(this.archive[i])['cartes'],
-                  favoris: JSON.parse(this.archive[i])['favoris']
-                })
-                console.log(JSON.stringify(this.historiques))
-            }
-        }
+  private FixerHeaderGET() {
+            let headers = new Headers({ 'deviceToken': 'DT-1000000000000000000000000000000000000002' });
+            headers.append('Accept', 'application/json')
+            return new RequestOptions({ headers: headers });
+  }
+
+  HistoriqueDesRecherches(){
+      let item: Sortie
+      if(this.utilisateur){
+        for(let s in this.utilisateur.searches){
+        this.http.get('https://appfront.dev.buddiz.io:443/search/' + this.utilisateur.searches[s] , this.FixerHeaderGET()).subscribe((response: Response) => {console.log(response.json()); item = response.json()}, (error: any) => console.log('error data'));
+        this.historiques.push(item)
+      }
+      }
   }
 
   historique(event, hist) {
-    this.navCtrl.push(HistoriquePage
-    ,{
-      id: hist.id,
-      nom: hist.nom,
-      description: hist.description,
-      date: hist.date,
-      lieu: hist.lieu,
-      cartes: hist.cartes,
-        favoris: hist.favoris
-    }
-    );
+    this.navCtrl.setRoot(HistoriquePage,{hist: hist, user_id: this.utilisateur._id})
   }
 
 
@@ -84,3 +87,13 @@ instant = new Date().toISOString()
   }
 
 }
+
+
+    // _id: hist._id,
+      // accessControl: hist.accessControl,
+      // searchParameters: hist.searchParameters,
+      // elementSelected: hist.elementSelected,
+      // elementExcluded: hist.elementExcluded,
+      // elementLiked: hist.elementLiked,
+      // elementDisliked: hist.elementDisliked,
+      // created_At: hist.created_At

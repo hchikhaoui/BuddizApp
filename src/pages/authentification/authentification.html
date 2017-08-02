@@ -7,41 +7,21 @@
 
 <ion-header align-title="center">
 
-    <ion-navbar  style="display: block;
-    height: 10px;
-    top: 25px;font-size: 16px;
-    font-weight: 300;
-    height: 20px;
-    left: 0;
-    line-height: 20px;
-    margin: -2px -10px -2px 0px;
-    min-width: 24px;
-    overflow: hidden;
-    position: absolute;
-    right: 0;
-    text-align: center;
-    text-overflow: ellipsis;
-    top: -20px;
-    white-space: nowrap;
-    z-index: 0;">
+    <ion-navbar id="e1">
     <ion-title class="h2 title title_custom">Login/Register</ion-title>
     </ion-navbar>
 </ion-header>
 
 
-<ion-content padding style="background-color: #F7FFED !important">
+<ion-content padding id="e2">
 
   <div *ngIf = "logged">
-    <img src="{{this.user.details.image}}" style="border-radius: 50%; -webkit-box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 1);
-    -moz-box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 1);
-    box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 1);
-    height: 50%;
-    width: 50%;
-    margin: 20%" />
-      <ion-label>nom :{{this.user.details.name}}</ion-label>
-    <ion-label>email :{{this.user.details.email}}</ion-label>
-    <ion-label>mot de passe :{{this.user.details.password}}</ion-label>
-    <ion-label>token :{{this.token}}</ion-label>
+    <ion-label>Id :{{this.utilisateur._id}}</ion-label>
+    <ion-label>Nom :{{this.utilisateur.userProfile.userName}}</ion-label>
+    <ion-label>Email :{{this.utilisateur.userProfile.userMail}}</ion-label>
+    <div *ngFor = "let tkn of this.utilisateur.deviceTokens">
+      <ion-label>token :{{tkn}}</ion-label>
+    </div>
     <button ion-button color="secondary" full (click)="doLogout()">Logout</button>
   </div>
 
@@ -49,12 +29,18 @@
 <div *ngIf="!logged">
   <div *ngIf="showLogin">
     <ion-item>
-      <ion-input type="email" placeholder="Email" [(ngModel)]="email"></ion-input>
+      <ion-input type="text" placeholder="Nom" [(ngModel)]="utilisateur.userProfile.userName"></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-input type="password" placeholder="Password" [(ngModel)]="password"></ion-input>
+      <ion-input type="email" placeholder="Email" [(ngModel)]="utilisateur.userProfile.userMail"></ion-input>
     </ion-item>
+
+    <ion-item>
+      <ion-input type="text" placeholder="token" [(ngModel)]="token"></ion-input>
+    </ion-item>
+
+    <ion-label>{{tokenParDefaut}}</ion-label>
 
     <ion-item>
       <button ion-button color="secondary" full (click)="doLogin()">Login</button>
@@ -69,19 +55,11 @@
   <div *ngIf="!showLogin">
 
     <ion-item>
-      <ion-input type="text" placeholder="Name" [(ngModel)]="name"></ion-input>
+      <ion-input type="text" placeholder="Nom" [(ngModel)]="utilisateur.userProfile.userName"></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-input type="email" placeholder="Email" [(ngModel)]="email"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-input type="password" placeholder="Password" [(ngModel)]="password"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-input type="url" placeholder="Paste url of your pic" [(ngModel)]="image"></ion-input>
+      <ion-input type="email" placeholder="Email" [(ngModel)]="utilisateur.userProfile.userMail"></ion-input>
     </ion-item>
 
     <ion-item>
@@ -96,5 +74,4 @@
 
 </div>
 
-  <button ion-button color="secondary" outline full (click)="status()">vérifier status</button>
 </ion-content>

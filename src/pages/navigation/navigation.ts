@@ -1,6 +1,7 @@
 ﻿import { Component, ViewChild } from '@angular/core';
 import { IonicPage} from 'ionic-angular';
 import { Platform, MenuController, Nav, NavController, ModalController, NavParams, App } from 'ionic-angular';
+import { Auth, User, UserDetails, IDetailedError } from '@ionic/cloud-angular';
 
 import { AccueilPage } from '../accueil/accueil';
 import { SuggestionsPage } from '../suggestions/suggestions';
@@ -29,48 +30,27 @@ public pages: Array<{title: string, component: any, icon: string}>;
 public historiques: Array<Sortie> = []
 public archive = [];
 
-constructor(public modalCtrl: ModalController, private app: App,public menuCtrl: MenuController) {
+constructor(public auth:Auth, public user: User, public modalCtrl: ModalController, private app: App,public menuCtrl: MenuController, /*public navCtrl: NavController*/) {
     this.HistoriqueDesRecherches()
     this.pages = [
       { title: 'Accueil', component: AccueilPage, icon: 'home' },
       { title: 'Suggestions', component: SuggestionsPage, icon: 'search'},
       { title: 'Vote', component: VotePage, icon: 'thumbs-up' },
       { title: 'Synthese', component: SynthesePage, icon: 'stats' },
-      { title: 'Contribution', component: AddFriendsPage, icon: 'people' },
+      { title: 'Ajouter des amis', component: AddFriendsPage, icon: 'people' },
     ];
 }
-x: string = 'home'
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad NavigationPage');
+  HistoriqueDesRecherches(){
+    if(this.auth.isAuthenticated()){
+      this.historiques = this.user.get('sorties', null)
+    }
   }
-
-  HistoriqueDesRecherches()
-    {
-      let j = 0
-        for (var i = 0; i<localStorage.length; i++) {
-            this.archive[i] = localStorage.getItem(localStorage.key(i));
-            if (JSON.parse(this.archive[i])['lieu']) {
-                j++
-                this.historiques.push({
-                  id: JSON.parse(this.archive[i])['id'],
-                  nom: JSON.parse(this.archive[i])['nom'],
-                  description: JSON.parse(this.archive[i])['description'],
-                  date: JSON.parse(this.archive[i])['date'],
-                  lieu: JSON.parse(this.archive[i])['lieu'],
-                  cartes: JSON.parse(this.archive[i])['cartes'],
-                  favoris: JSON.parse(this.archive[i])['favoris']
-
-                })
-                console.log(JSON.stringify(this.historiques))
-            }
-        }
-  }
-
+  
   OptionsModal(option: string){
   if(option == 'Accueil'){
-    //this.app.getActiveNav().push(AccueilPage)
-  }else if(option == 'Contribution'){
+
+  }else if(option == 'Ajouter des amis'){
     let ctrb = this.modalCtrl.create(AddFriendsPage)
     ctrb.present();
   }
@@ -81,11 +61,13 @@ x: string = 'home'
   this.menuCtrl.close();
   }
 
-  openPage(page) {
+  // openPage(page) {
+  //   this.menuCtrl.close();
+  //   this.app.getActiveNav().push(page.component)
+  // }
 
-    this.menuCtrl.close();
-
-    this.app.getActiveNav().push(page.component)
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad NavigationPage');
   }
 
 }

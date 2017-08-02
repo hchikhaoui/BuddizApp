@@ -1,18 +1,13 @@
 ﻿import { Component, ViewChild } from '@angular/core';
 import { IonicPage} from 'ionic-angular';
-import { Platform, MenuController, Nav } from 'ionic-angular';
+import { Platform, MenuController, Nav, App, AlertController, LoadingController /*NavController*/ } from 'ionic-angular';
+import { Http, Headers, RequestOptions, Response } from '@angular/http';
 
 import { AccueilPage } from '../accueil/accueil';
-import { SuggestionsPage } from '../suggestions/suggestions';
-import { SynthesePage } from '../synthese/synthese';
 
-import { AlertController, LoadingController } from 'ionic-angular';
-import { Auth, User, UserDetails, IDetailedError } from '@ionic/cloud-angular';
-import { ViewController } from 'ionic-angular';
-
-import {Sortie} from '../../models/sortie'
-import {Client} from '../../models/client'
-
+import {Utilisateur} from '../../models/utilisateur'
+// DT-108f9f8b37463c8f54a87a8930f3695a7e128301 user@mail.com      597a491802dbb8698d2cb647
+// DT-fc42b8d2f3c4ff16b8918deb5935c72a8b0387f5 another@mail.com   597b30935b651e567869d16f
 
 /**
  * Generated class for the AuthentificationPage page.
@@ -31,41 +26,76 @@ export class AuthentificationPage {
 @ViewChild(Nav) nav: Nav;
 rootPage = AccueilPage;
 
-  public client: Client = {
-    id: null,
-    nom: '',
-    mail: '',
-    passe: '',
-    image: '',
-    sorties: []
-  }
+  public utilisateur: Utilisateur = {
+    _id: '',
+    userProfile: {userName: '', userMail: ''},
+    deviceTokens: [],
+    searches: [],
 
-  public name:string = '';
-  public email:string = '';
-  public password:string = '';
-  public image:string = ''
+    accessControl: {
+      appRoles: [],
+      appGroups: [],
+      users: [],
+      groups: [],
+      permissions: []
+    }
+  };
 
-  public token: string = ''
-
-public logged: boolean = false;
-public showLogin:boolean = true;
+  public token: string = '';
+  public tokenParDefaut: string = 'DT-1000000000000000000000000000000000000002';
+  logged: boolean = false
+  showLogin: boolean = true
 
 public constructor(
-//    public viewCtrl: ViewController,
-    public auth:Auth,
-    public user: User,
+/*    public navCtrl: NavController, */
+    private http: Http,
+    public app: App,
     public alertCtrl: AlertController,
     public loadingCtrl:LoadingController,
     public platform: Platform,
     public menuCtrl: MenuController,
-    ) {
+    ) {}
+
+
+  headerGET(){
+  let headers = new Headers({ 'deviceToken': this.token });
+  headers.append('Accept', 'application/json')
+  return new RequestOptions({ headers: headers });
   }
 
-  doLogin() {
-    if(this.showLogin) {
-      console.log('process login');
+  doLogin(){
 
-      if(this.email === '' || this.password === '') {
+      let loader = this.loadingCtrl.create({
+        content: "En cours de login..."
+      });
+      loader.present();
+
+      this.http.get('https://appfront.dev.buddiz.io:443/user/token/device', this.headerGET()).subscribe((response: Response) =>
+      {
+        // console.log(response.json());
+        this.utilisateur = response.json()
+        localStorage.setItem(this.utilisateur._id, JSON.stringify(this.utilisateur))
+
+        loader.dismissAll()
+        this.logged = true
+        this.app.getActiveNav().push(AccueilPage, {user_id: this.utilisateur._id})
+      },
+        (error: any) =>
+        {
+          loader.dismissAll()
+          console.log(error.message)
+        })
+  }
+
+
+  headerPOST(){
+    let headers = new Headers({ 'Content-Type': 'application/json'});
+    headers.append('Accept', 'application/json')
+    return new RequestOptions({ headers: headers });
+  }
+  doRegister() {
+
+    if(this.utilisateur.userProfile.userName === '' || this.utilisateur.userProfile.userMail === '') {
         let alert = this.alertCtrl.create({
           title:'Erreur',
           subTitle:'Tous les champs sont requis',
@@ -74,112 +104,35 @@ public constructor(
         alert.present();
         return;
       }
-      let loader = this.loadingCtrl.create({
-        content: "Logging in..."
-      });
-      loader.present();
 
 
-      let details: UserDetails = {'email':this.email, 'password':this.password};
+    let loader = this.loadingCtrl.create({
+      content: "En cours de register..."
+    });
+    loader.present();
 
-      this.auth.login('basic', details, {'remember': false}).then((res: any) => {
-          this.user.set('birthday', '05/07/2002')
-          this.user.save()
-          //console.log(this.user.get('birthday', null))
-          //console.log(this.user.data.get('birthday', null))
-
-          console.log(this.user.details.name)
-          console.log(this.user.details.email)
-          console.log(this.user.details.password)
-          console.log(this.user.details.image)
-
-        this.token = res.token
-
-        loader.dismissAll();
-        this.logged = true;
-        // this.nav.setRoot(AccueilPage);
-      }
-      , (err) => {
-        loader.dismissAll();
-        console.log(err.message);
-
-        let errors = '';
-        if(err.message === 'UNPROCESSABLE ENTITY') errors += 'Email  n\'est pas valide.<br/>';
-        if(err.message === 'UNAUTHORIZED') errors += 'Mot de passe requis.<br/>';
-
-        let alert = this.alertCtrl.create({
-          title:'Erreur',
-          subTitle:errors,
-          buttons:['OK']
-        });
-        alert.present();
-      });
-    } else {
-      this.showLogin = true;
-    }
-
-//    this.viewCtrl.dismiss()
-  }
-
-  doRegister() {
-    if(!this.showLogin) {
-      console.log('process register');
-
-      /*
-      do our own initial validation
-      */
-      if(this.name === '' || this.email === '' || this.password === '') {
-        let alert = this.alertCtrl.create({
-          title:'Erreur',
-          subTitle:'All fields are rquired',
-          buttons:['OK']
-        });
-        alert.present();
-        return;
-      }
-
-      let details: UserDetails = {'email':this.email, 'password':this.password, 'name':this.name, 'image': this.image};
-
-      let loader = this.loadingCtrl.create({
-        content: "Registering your account..."
-      });
-      loader.present();
-
-      this.auth.signup(details).then(() => {
-        loader.dismissAll();
-      }, (err:IDetailedError<string[]>) => {
-        loader.dismissAll();
-        let errors = '';
-        for(let e of err.details) {
-          console.log(e);
-          if(e === 'required_email') errors += 'Email requis.<br/>';
-          if(e === 'required_password') errors += 'Mot de passe requis.<br/>';
-          if(e === 'conflict_email') errors += 'A user with this email already exists.<br/>';
-          //don't need to worry about conflict_username
-          if(e === 'invalid_email') errors += 'Votre Email n\'est pas valide.';
-        }
-        let alert = this.alertCtrl.create({
-          title:'Register Error',
-          subTitle:errors,
-          buttons:['OK']
-        });
-        alert.present();
-      });
-
-    } else {
-      this.showLogin = false;
-    }
-//    this.viewCtrl.dismiss()
+     this.http.post('https://appfront.dev.buddiz.io:443/users', this.utilisateur, this.headerPOST()).subscribe((response: Response) =>
+       {
+         console.log(response.json());
+         this.utilisateur = response.json()
+         loader.dismissAll()
+         this.showLogin = !this.showLogin
+         },
+       (error: any) =>
+       {
+         loader.dismissAll()
+         console.log(error.message)
+       })
   }
 
   doLogout(){
-    this.auth.logout()
+    localStorage.clear()
+    this.token = ''
     this.logged = false
-  }
+    this.app.getActiveNav().push(AccueilPage)
+    // this.navCtrl.setRoot(AccueilPage);
+    // this.nav.setRoot(AccueilPage);
 
-  status(){
-    console.log(this.user.details.name)
-    console.log(this.auth.isAuthenticated())
   }
 
   ionViewDidLoad() {

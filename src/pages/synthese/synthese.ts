@@ -1,6 +1,6 @@
 ﻿import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
-
+import { IonicPage, NavController, NavParams, ModalController, App } from 'ionic-angular';
+import { Auth, User, UserDetails, IDetailedError } from '@ionic/cloud-angular';
 
 import {SuggestionsPage} from '../suggestions/suggestions'
 import {VotePage} from '../vote/vote'
@@ -8,6 +8,10 @@ import { OptionsPage } from '../../modals/sortie_options';
 
 import {Sortie} from '../../models/sortie'
 import {Carte} from '../../models/carte'
+import {Utilisateur} from '../../models/utilisateur'
+import {Elementt} from '../../models/elementt';
+
+
 import {AccueilPage} from "../accueil/accueil";
 /**
  * Generated class for the SynthesePage page.
@@ -22,64 +26,71 @@ import {AccueilPage} from "../accueil/accueil";
 })
 export class SynthesePage {
 
-  public recherche: Sortie = {
-      id: null,
-      nom: '',
-      description: '',
-      date: new Date().toISOString(),
-      lieu: '',
-      cartes: [],
-    favoris: []
+public utilisateur: Utilisateur = {
+    _id: '',
+    userProfile: {userName: '', userMail: ''},
+    deviceTokens: [],
+    searches: [],
+    accessControl: {
+      appRoles: [],
+      appGroups: [],
+      users: [],
+      groups: [],
+      permissions: []
+    }
   }
-  constructor(public modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams) {
+public usr = this.utilisateur._id
+public sortie: Sortie = {
+    accessControl:{
+    userPermissionsOnApp: [],
+    userPermissionsOnObject: [],
+    users: {
+      usr: [
+        "searchOwner",
+        "searchContributor",
+        "searchViewer"
+      ]
+    }
+  },
+  _id: '',
+  searchParameters:{
+    useCase: '',
+    useCaseParams: [], 
+      isOpen: '',
+       name: '',
+      timeStamp: null
+    },
+      elementSelected: [],
+      elementExcluded: [],
+      elementLiked: [],
+      elementDisliked: [],
+      created_At: null
+    }
 
-    this.recherche.id = navParams.get('id');
-    this.recherche.nom = navParams.get('nom');
-    this.recherche.description = navParams.get('description');
-    this.recherche.date = navParams.get('date');
-    this.recherche.lieu = navParams.get('lieu');
-    this.recherche.cartes = navParams.get('cartes');
-    this.recherche.favoris = navParams.get('favoris');
+  public sorties: Array<Sortie>
+
+  constructor(public app: App, public auth:Auth, public user: User, public modalCtrl: ModalController, public navCtrl: NavController, public navParams: NavParams) {
+
+    if(localStorage.getItem(navParams.get('user_id'))){
+      this.utilisateur = JSON.parse(localStorage.getItem(navParams.get('user_id')));
+    }
+    this.sortie = navParams.get('sortie');
   }
 
   Accueil(event){
-    this.navCtrl.popToRoot()
+    this.navCtrl.setRoot(AccueilPage, {user_id: this.utilisateur._id})
   }
 
   Suggestions(event) {
-    this.navCtrl.push(SuggestionsPage,{
-      id: this.recherche.id,
-      nom: this.recherche.nom,
-      description: this.recherche.description,
-      date: this.recherche.date,
-      lieu: this.recherche.lieu,
-      cartes: this.recherche.cartes,
-      favoris: this.recherche.favoris
-    });
+    this.navCtrl.setRoot(SuggestionsPage,{sortie: this.sortie, user_id: this.utilisateur._id});
   }
 
   Vote(event) {
-    this.navCtrl.push(VotePage,{
-      id: this.recherche.id,
-      nom: this.recherche.nom,
-      description: this.recherche.description,
-      date: this.recherche.date,
-      lieu: this.recherche.lieu,
-      cartes: this.recherche.cartes,
-      favoris: this.recherche.favoris
-    });
+    this.navCtrl.setRoot(VotePage,{sortie: this.sortie, user_id: this.utilisateur._id});
   }
 
   Synthese(event) {
-    this.navCtrl.push(SynthesePage,{
-      id: this.recherche.id,
-      nom: this.recherche.nom,
-      description: this.recherche.description,
-      date: this.recherche.date,
-      lieu: this.recherche.lieu,
-      cartes: this.recherche.cartes,
-      favoris: this.recherche.favoris
-    });
+    this.navCtrl.setRoot(SynthesePage,{sortie: this.sortie, user_id: this.utilisateur._id});
   }
 
   ionViewDidLoad() {
